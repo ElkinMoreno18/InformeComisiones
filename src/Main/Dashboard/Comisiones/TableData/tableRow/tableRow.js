@@ -1,5 +1,5 @@
 import React from "react";
-import CurrencyInput from "react-currency-input-field";
+import AutosizeInput from "react-input-autosize";
 
 class TableRow extends React.Component {
   constructor(props) {
@@ -148,9 +148,8 @@ class TableRow extends React.Component {
 
     // ------------------------------ STYLES --------------------------
 
-    const inputStyle = { width: "100%" };
-    const columnStyle = { width: "7%" };
-    const secondInput = { width: "10%" };
+    const columnInputStyle = { width: "150%", width: "150%" };
+    const inputStyle = { backgroundColor: "red" };
 
     // ----------------------------- CODE HTML RETURN -------------------
 
@@ -159,26 +158,27 @@ class TableRow extends React.Component {
         <tr>
           <td>{item.month}</td>
           <td>{presuVenta}</td>
-          <td style={columnStyle}>
-            <input
+          <td>
+            <AutosizeInput
+              placeholder="Ingrese valor"
               type="number"
               onChange={(e) => this.calcularVentaEjecutada(e)}
               value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
               id={`VentaEjecutada${item.month}`}
               min="0"
-            ></input>
+            />
           </td>
           {/* Venta Ejecutada */}
-          <td style={columnStyle}>{porcentajeCumpli + "%"}</td>
-          <td style={secondInput}>
-            <input
+          <td>{porcentajeCumpli + "%"}</td>
+          <td>
+            <AutosizeInput
+              placeholder="Ingrese valor"
               type="number"
               onChange={(evt) => this.calcularClienteFacturando(evt)}
               value={item.ClienteActual == 0 ? "" : item.ClienteActual}
               id={`ClienteActual${item.month}`}
-              style={inputStyle}
               min="0"
-            ></input>
+            />
           </td>
           {/* Cliente Facturando */}
           <td>{porcentajeActu + "%"}</td>

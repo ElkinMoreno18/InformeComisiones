@@ -1,6 +1,7 @@
 import React from "react";
 import Table from "./TableData/tableData";
 import "material-icons/iconfont/material-icons.css";
+import CurrencyInput from "react-currency-input-field";
 
 const options = [
   {
@@ -30,7 +31,7 @@ class Comisiones extends React.Component {
       meses: 10,
       presupuestoMensual: "",
       mostrarTabla: false,
-      representante: '',
+      representante: "",
       activarCampos: false,
       activarButton: false,
     };
@@ -43,6 +44,8 @@ class Comisiones extends React.Component {
       salario: salario,
     });
   }
+
+
 
   cambioPresupuesto(presupuesto) {
     this.setState({
@@ -65,12 +68,12 @@ class Comisiones extends React.Component {
   };
 
   handleChange(event) {
-    if(event.target.value !== "general"){
+    if (event.target.value !== "general") {
       this.setState({
         salario: "",
         presupuesto: "",
         mostrarTabla: false,
-      })
+      });
     }
     this.setState({
       representante: event.target.value,
@@ -79,6 +82,9 @@ class Comisiones extends React.Component {
   }
 
   render() {
+
+    const prefix = "$ ";
+
     const styleContainer = {
       width: "90%",
       marginLeft: "5%",
@@ -87,6 +93,11 @@ class Comisiones extends React.Component {
       textAlign: "center",
     };
     const titleStyle = { paddingTop: "1%" };
+    const styleTwoLastColumns = {
+      width: "74%",
+      margin: "auto",
+      marginTop: "3%",
+    };
 
     return (
       <>
@@ -94,12 +105,45 @@ class Comisiones extends React.Component {
           <h2 style={titleStyle}>Informe de Comisiones</h2>
           <form>
             <div className="row w-100 align-items-start text-center p-3">
-              <div className="col">
-                <label htmlFor="monthSalary" name="monthSalary">
-                  Salario Mensual
+              <div className="col ">
+                <label
+                  className="form-label"
+                  htmlFor="selectRepresentante"
+                  name="selectRepresentante"
+                >
+                  Representante
                 </label>
                 <br />
+                <select
+                  defaultValue={"default"}
+                  className="form-select"
+                  value={this.state.representante}
+                  onChange={this.handleChange}
+                  name="selectRepresentante"
+                >
+                  <option value={"default"} selected>
+                    General
+                  </option>
+                  <optgroup label="Vendedores">
+                    <option value="Leidy">Leidy tangarife</option>
+                    <option value="Andres">Andres Mesa</option>
+                  </optgroup>
+                  <optgroup label="Coordinadores">
+                    <option value="Daniela">Daniela Zapata</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div className="col">
+                <label
+                  className="form-label"
+                  htmlFor="inputMonthSalary"
+                  name="monthSalary"
+                >
+                  Salario Mensual
+                </label>
+
                 <input
+                  className="form-control"
                   type="number"
                   id="inputMonthSalary"
                   name="monthSalary"
@@ -111,11 +155,16 @@ class Comisiones extends React.Component {
                 />
               </div>
               <div className="col">
-                <label htmlFor="pptoAnual" name="pptoAnual">
+                <label
+                  className="form-label"
+                  htmlFor="pptoAnual"
+                  name="pptoAnual"
+                >
                   Presupuesto Anual
                 </label>
                 <br />
                 <input
+                  className="form-control"
                   type="number"
                   id="inputPptoAnual"
                   name="pptoAnual"
@@ -127,11 +176,12 @@ class Comisiones extends React.Component {
                 />
               </div>
               <div className="col">
-                <label htmlFor="months" name="months">
+                <label className="form-label" htmlFor="months" name="months">
                   Meses
                 </label>
                 <br />
                 <input
+                  className="form-control"
                   type="number"
                   id="inputMonths"
                   name="months"
@@ -140,11 +190,16 @@ class Comisiones extends React.Component {
                 />
               </div>
               <div className="col">
-                <label htmlFor="pptoMonth" name="pptoMonth">
+                <label
+                  className="form-label"
+                  htmlFor="pptoMonth"
+                  name="pptoMonth"
+                >
                   Presupuesto Mensual
                 </label>
                 <br />
                 <input
+                  className="form-control"
                   type="number"
                   id="inputPptoMonth"
                   name="pptoMonth"
@@ -157,23 +212,14 @@ class Comisiones extends React.Component {
               </div>
               <div className="col">
                 <br />
-                <input
+                <button
+                  className="btn btn-success"
                   onClick={this.submitForm}
-                  type="submit"
-                  value="Calcular"
                   disabled={this.state.activarButton ? false : true}
-                />
-              </div>
-              <div className="col">
-                <br />
-                <select
-                  value={this.state.representante}
-                  onChange={this.handleChange}
+                  style={styleTwoLastColumns}
                 >
-                  {options.map(option => (
-                    <option key={option.value} value={option.value}>{option.name}</option>
-                  ))}
-                </select>
+                  Calcular
+                </button>
               </div>
             </div>
           </form>

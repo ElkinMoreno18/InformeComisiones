@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import TableRow from "./tableRow/tableRow";
 
 class tableData extends React.Component {
@@ -66,24 +66,21 @@ class tableData extends React.Component {
         );
       }
 
-      const [configuration, setConfiguration] = useState({});
-
       return (
         <TableRow
           item={item}
           itemAnterior={itemAnterior}
           key={index}
           salarioMensual={monthSalary}
-          onSubmit={(data) => setConfiguration(data)}
         />
       );
 
     });
 
     const headerStyle = { backgroundColor: "rgb(0, 99, 71)", color: "White" };
-    const tableStyle = { marginTop: "0.5%"};
-    const auxHeadStyle = { backgroundColor: "white"}
-    const auxStyle = { backgroundColor: "#808080", borderLeft: "2px solid white" }
+    const tableStyle = { marginTop: "0.5%" };
+    const auxHeadStyle = { backgroundColor: "white", lineHeight: "100%" }
+    const auxStyle = { backgroundColor: "#808080", borderLeft: "2px solid white", }
 
     return (
       <>
