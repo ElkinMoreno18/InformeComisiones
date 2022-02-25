@@ -2,6 +2,25 @@ import React from "react";
 import Table from "./TableData/tableData";
 import "material-icons/iconfont/material-icons.css";
 
+const options = [
+  {
+    value: "leidy",
+    name: "Leidy Tangarife",
+  },
+  {
+    value: "andres",
+    name: "Andres Mesa",
+  },
+  {
+    value: "coordinador",
+    name: "Coordinador",
+  },
+  {
+    value: "general",
+    name: "General",
+  },
+];
+
 class Comisiones extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +30,12 @@ class Comisiones extends React.Component {
       meses: 10,
       presupuestoMensual: "",
       mostrarTabla: false,
+      representante: '',
+      activarCampos: false,
+      activarButton: false,
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   cambioSalario(salario) {
@@ -23,7 +47,8 @@ class Comisiones extends React.Component {
   cambioPresupuesto(presupuesto) {
     this.setState({
       presupuesto: presupuesto,
-      presupuestoMensual: Math.floor(presupuesto / 10),
+      presupuestoMensual: Math.round(presupuesto / 10),
+      activarButton: true,
     });
   }
 
@@ -31,87 +56,130 @@ class Comisiones extends React.Component {
     var SalarioMensual = this.state.salario;
     var Presupuesto = this.state.presupuesto;
     var Meses = this.state.meses;
-    this.state.presupuestoMensual = Math.floor(Presupuesto / Meses);
+    this.state.presupuestoMensual = Math.round(Presupuesto / Meses);
     var PresupuestoMensual = this.state.presupuestoMensual;
-    console.log(SalarioMensual);
-    console.log(this.state);
-    console.log(Presupuesto);
-    console.log(Meses);
-    console.log(PresupuestoMensual);
     event.preventDefault();
     this.setState({
-        mostrarTabla: true,
-    })
+      mostrarTabla: true,
+    });
   };
 
+  handleChange(event) {
+    if(event.target.value !== "general"){
+      this.setState({
+        salario: "",
+        presupuesto: "",
+        mostrarTabla: false,
+      })
+    }
+    this.setState({
+      representante: event.target.value,
+      activarCampos: true,
+    });
+  }
+
   render() {
+    const styleContainer = {
+      width: "90%",
+      marginLeft: "5%",
+      marginRigth: "5%",
+      marginTop: "0.5%",
+      textAlign: "center",
+    };
+    const titleStyle = { paddingTop: "1%" };
+
     return (
       <>
-        <form>
-          <div className="row align-items-start text-center p-3">
-            <div className="col">
-              <label htmlFor="monthSalary" name="monthSalary">
-                Salario Mensual
-              </label>
-              <input
-                type="number"
-                id="inputMonthSalary"
-                name="monthSalary"
-                value={this.state.salario}
-                onChange={(ev) => {
-                  this.cambioSalario(ev.target.value);
-                }}
-              />
+        <div className="contenedor" style={styleContainer}>
+          <h2 style={titleStyle}>Informe de Comisiones</h2>
+          <form>
+            <div className="row w-100 align-items-start text-center p-3">
+              <div className="col">
+                <label htmlFor="monthSalary" name="monthSalary">
+                  Salario Mensual
+                </label>
+                <br />
+                <input
+                  type="number"
+                  id="inputMonthSalary"
+                  name="monthSalary"
+                  value={this.state.salario}
+                  onChange={(ev) => {
+                    this.cambioSalario(ev.target.value);
+                  }}
+                  disabled={this.state.activarCampos ? false : true}
+                />
+              </div>
+              <div className="col">
+                <label htmlFor="pptoAnual" name="pptoAnual">
+                  Presupuesto Anual
+                </label>
+                <br />
+                <input
+                  type="number"
+                  id="inputPptoAnual"
+                  name="pptoAnual"
+                  value={this.state.presupuesto}
+                  onChange={(ev) => {
+                    this.cambioPresupuesto(ev.target.value);
+                  }}
+                  disabled={this.state.activarCampos ? false : true}
+                />
+              </div>
+              <div className="col">
+                <label htmlFor="months" name="months">
+                  Meses
+                </label>
+                <br />
+                <input
+                  type="number"
+                  id="inputMonths"
+                  name="months"
+                  value={this.state.meses}
+                  disabled
+                />
+              </div>
+              <div className="col">
+                <label htmlFor="pptoMonth" name="pptoMonth">
+                  Presupuesto Mensual
+                </label>
+                <br />
+                <input
+                  type="number"
+                  id="inputPptoMonth"
+                  name="pptoMonth"
+                  value={Math.round(this.state.presupuesto / this.state.meses)}
+                  onChange={(ev) => {
+                    this.cambioPresupuestoMensual(ev.target.value);
+                  }}
+                  disabled
+                />
+              </div>
+              <div className="col">
+                <br />
+                <input
+                  onClick={this.submitForm}
+                  type="submit"
+                  value="Calcular"
+                  disabled={this.state.activarButton ? false : true}
+                />
+              </div>
+              <div className="col">
+                <br />
+                <select
+                  value={this.state.representante}
+                  onChange={this.handleChange}
+                >
+                  {options.map(option => (
+                    <option key={option.value} value={option.value}>{option.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="col">
-              <label htmlFor="pptoAnual" name="pptoAnual">
-                Presupuesto Anual
-              </label>
-              <input
-                type="number"
-                id="inputPptoAnual"
-                name="pptoAnual"
-                value={this.state.presupuesto}
-                onChange={(ev) => {
-                  this.cambioPresupuesto(ev.target.value);
-                }}
-              />
-            </div>
-            <div className="col">
-              <label htmlFor="months" name="months">
-                Meses
-              </label>
-              <br />
-              <input
-                type="number"
-                id="inputMonths"
-                name="months"
-                value={this.state.meses}
-                disabled
-              />
-            </div>
-            <div className="col">
-              <label htmlFor="pptoMonth" name="pptoMonth">
-                Presupuesto Mensual
-              </label>
-              <input
-                type="number"
-                id="inputPptoMonth"
-                name="pptoMonth"
-                value={Math.floor(this.state.presupuesto / this.state.meses)}
-                onChange={(ev) => {
-                  this.cambioPresupuestoMensual(ev.target.value);
-                }}
-                disabled
-              />
-            </div>
-            <div className="col">
-              <input onClick={this.submitForm} type="submit" value="Calcular" />
-            </div>
-          </div>
-        </form>
+          </form>
 
-        {(this.state.mostrarTabla) ? <Table data={this.state}/> : null}
+          {this.state.mostrarTabla ? <Table data={this.state} /> : null}
+        </div>
       </>
     );
   }

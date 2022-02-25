@@ -1,4 +1,5 @@
 import React from "react";
+import CurrencyInput from "react-currency-input-field";
 
 class TableRow extends React.Component {
   constructor(props) {
@@ -6,6 +7,7 @@ class TableRow extends React.Component {
     this.state = {
       item: props.item,
       itemAnterior: props.itemAnterior,
+      salarioMensual: props.salarioMensual,
     };
   }
 
@@ -28,43 +30,49 @@ class TableRow extends React.Component {
   }
 
   calcularVentaEjecutada(e) {
-  const item = this.state.item;
+    const item = this.state.item;
     const itemAnterior = this.state.itemAnterior;
     var newValor = parseInt(e.target.value);
     item.VentaEjecutada = newValor;
 
     item.porcCumplimiento =
-      item.VentaEjecutada > item.PresupuestoAcumulado
+      item.PresupuestoAcumulado > item.VentaEjecutada
         ? item.VentaEjecutada / item.PresupuestoAcumulado
         : 0;
+
     item.Porcentaje =
-      item.ClienteActual > item.VentaEjecutada
+      item.VentaEjecutada > item.ClienteActual
         ? item.ClienteActual / item.VentaEjecutada
         : 0;
+
     item.ClienteNuevo = item.VentaEjecutada * item.PorcentajeNuevo;
-    item.pptoAcumulado =
-      item.pptoVenta + itemAnterior.pptoAcumulado - itemAnterior.VentaEjecutada;
-    
-      this.setState({
+
+    if (itemAnterior == null) {
+      item.pptoAcumulado = item.pptoVenta;
+    } else {
+      item.pptoAcumulado =
+        item.pptoVenta +
+        itemAnterior.pptoAcumulado -
+        itemAnterior.VentaEjecutada;
+    }
+
+    this.setState({
       item: item,
     });
   }
 
   calcularClienteFacturando(event) {
     const item = this.state.item;
-    console.log(item)
     var nuevoValor = parseInt(event.target.value);
     item.ClienteActual = nuevoValor;
 
     item.Porcentaje =
-      item.ClienteActual > item.VentaEjecutada
+      item.VentaEjecutada > item.ClienteActual
         ? item.ClienteActual / item.VentaEjecutada
         : 0;
 
     item.ComisionAct =
       item.ClienteActual * this.Percentages(item.porcCumplimiento, "act");
-
-      console.log(item);
 
     this.setState({
       item: item,
@@ -76,68 +84,136 @@ class TableRow extends React.Component {
     const itemAnterior = this.state.itemAnterior;
 
     item.porcCumplimiento =
-      item.VentaEjecutada > item.PresupuestoAcumulado
+      item.PresupuestoAcumulado > item.VentaEjecutada
         ? item.VentaEjecutada / item.PresupuestoAcumulado
         : 0;
 
-    if (itemAnterior !== null) {
-   /*    item.ClienteActual =
-        item.VentaEjecutada < itemAnterior.ClienteNuevo
-          ? item.VentaEjecutada
-          : itemAnterior.ClienteNuevo;
- */
+    item.Porcentaje =
+      item.VentaEjecutada > item.ClienteActual
+        ? item.ClienteActual / item.VentaEjecutada
+        : 0;
+
+    item.PorcentajeNuevo = 1 - item.Porcentaje;
+
+    item.ComisionAct =
+      item.ClienteActual * this.Percentages(item.porcCumplimiento, "act");
+
+    item.ClienteNuevo = Math.round(item.VentaEjecutada * item.PorcentajeNuevo);
+
+    item.ComisionNue =
+      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new");
+
+    item.salarioTotal =
+      item.ComisionAct + item.ComisionNue + parseInt(this.state.salarioMensual);
+
+    if (itemAnterior == null && item.month == 1) {
+      item.month = 1;
+      item.VentaEjecutada = "-";
+      item.porcCumplimiento = "-";
+    }
+
+    if (itemAnterior == null && item.month == 2) {
+      item.PresupuestoAcumulado = item.pptoVenta;
+    } else if (itemAnterior !== null && item.month > 2) {
+      /*    item.ClienteActual =
+             item.VentaEjecutada < itemAnterior.ClienteNuevo
+               ? item.VentaEjecutada
+               : itemAnterior.ClienteNuevo;
+      */
       item.PresupuestoAcumulado =
         item.pptoVenta +
         itemAnterior.PresupuestoAcumulado -
         itemAnterior.VentaEjecutada;
-    } else {
-    //   item.ClienteActual = 0;
-      item.PresupuestoAcumulado = item.pptoVenta;
     }
 
-    item.Porcentaje =
-      item.ClienteActual > item.VentaEjecutada
-        ? item.ClienteActual / item.VentaEjecutada
-        : 0;
+    ////////////////////////////////////////////////////////////////////
+
+    const presuVenta = item.pptoVenta.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
+    const porcentajeCumpli = Math.round(item.porcCumplimiento * 100);
+
+    const porcentajeActu = Math.round(item.Porcentaje * 100);
+
+    const ventaClienteNuevo = item.ClienteNuevo.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
+    const porcentajeVentaNueva = Math.round(item.PorcentajeNuevo * 100);
+
+    // ------------------------------ STYLES --------------------------
+
+    const inputStyle = { width: "100%" };
+    const columnStyle = { width: "7%" };
+    const secondInput = { width: "10%" };
+
+    // ----------------------------- CODE HTML RETURN -------------------
 
     return (
-      <tr>
-        <td>{item.month}</td>
-        <td>{item.pptoVenta}</td>
-        <td>
-          <input
-            type="number"
-            onChange={(e) => this.calcularVentaEjecutada(e)}
-            value={item.VentaEjecutada}
-            id={`VentaEjecutada${item.month}`}
-          ></input>
-        </td>
-        {/* Venta Ejecutada */}
-        <td>{item.porcCumplimiento*100}</td>
-        <td>
-          <input
-            type="number"
-            onChange={(evt) => this.calcularClienteFacturando(evt)}
-            value={item.ClienteActual}
-            id={`ClienteActual${item.month}`}
-          ></input>
-        </td>
-        {/* Cliente Facturando */}
-        <td>{item.Porcentaje*100}</td>
-        <td>{item.VentaEjecutada * item.PorcentajeNuevo}</td>
-        <td>{(1 - item.Porcentaje)*100}</td>
-        <td>{item.PresupuestoAcumulado}</td>
-        <td>
-          {item.ClienteActual * this.Percentages(item.porcCumplimiento, "act")}
-        </td>
-        <td>
-          {item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new")}
-        </td>
-        <td>{item.ComisionAct + item.ComisionNue}</td>
-        <td>
-          {item.ComisionAct + item.ComisionNue + this.props.SalarioMensual}{" "}
-        </td>
-      </tr>
+      <>
+        <tr>
+          <td>{item.month}</td>
+          <td>{presuVenta}</td>
+          <td style={columnStyle}>
+            <input
+              type="number"
+              onChange={(e) => this.calcularVentaEjecutada(e)}
+              value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
+              id={`VentaEjecutada${item.month}`}
+              min="0"
+            ></input>
+          </td>
+          {/* Venta Ejecutada */}
+          <td style={columnStyle}>{porcentajeCumpli + "%"}</td>
+          <td style={secondInput}>
+            <input
+              type="number"
+              onChange={(evt) => this.calcularClienteFacturando(evt)}
+              value={item.ClienteActual == 0 ? "" : item.ClienteActual}
+              id={`ClienteActual${item.month}`}
+              style={inputStyle}
+              min="0"
+            ></input>
+          </td>
+          {/* Cliente Facturando */}
+          <td>{porcentajeActu + "%"}</td>
+          <td>{ventaClienteNuevo}</td>
+          <td>{porcentajeVentaNueva + "%"}</td>
+          <td>
+            {item.PresupuestoAcumulado.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+              minimumFractionDigits: 0,
+            })}
+          </td>
+          <td>
+            {item.ComisionAct.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+              minimumFractionDigits: 0,
+            })}
+          </td>
+          <td>
+            {item.ComisionNue.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+              minimumFractionDigits: 0,
+            })}
+          </td>
+          <td>
+            {item.salarioTotal.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+              minimumFractionDigits: 0,
+            })}
+          </td>
+        </tr>
+      </>
     );
   }
 }

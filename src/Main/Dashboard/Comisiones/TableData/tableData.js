@@ -8,7 +8,6 @@ class tableData extends React.Component {
   }
 
   MonthPresupuesto = this.props.data.presupuestoMensual;
-  // console.log(MonthPresupuesto + "Received")
 
   crearFila(month, presupuestoVenta) {
     return {
@@ -30,13 +29,14 @@ class tableData extends React.Component {
   render() {
     var monthPpto = this.props.data.presupuestoMensual;
     var monthSalary = this.props.data.salario;
+    var representative = this.props.data.representante;
 
     var fecha = new Date();
     var items = [];
 
     items.push(this.crearFila(1, "-"));
 
-    for (let index = 1; index < 4 + 1; index++) {
+    for (let index = 1; index < 5; index++) {
       items.push(this.crearFila(index + 1, monthPpto));
     }
 
@@ -47,33 +47,79 @@ class tableData extends React.Component {
         itemAnterior = items[index - 1];
       }
 
-      return <TableRow item={item} itemAnterior={itemAnterior} key={index} salarioMensual={monthSalary}/>;
+      if (index == 0) {
+        return (
+          <tr>
+            <td>{item.month}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+          </tr>
+        );
+      }
+
+      const [configuration, setConfiguration] = useState({});
+
+      return (
+        <TableRow
+          item={item}
+          itemAnterior={itemAnterior}
+          key={index}
+          salarioMensual={monthSalary}
+          onSubmit={(data) => setConfiguration(data)}
+        />
+      );
+
     });
+
+    const headerStyle = { backgroundColor: "rgb(0, 99, 71)", color: "White" };
+    const tableStyle = { marginTop: "0.5%"};
+    const auxHeadStyle = { backgroundColor: "white"}
+    const auxStyle = { backgroundColor: "#808080", borderLeft: "2px solid white" }
 
     return (
       <>
-        <table>
-          <thead>
-            <tr>
-              <td>Mes</td>
-              <td>PptoVenta</td>
-              <td>Venta Ejecutada</td>
-              <td>% Cumplimiento</td>
-              <td>Cliente Facturando</td>
-              <td>%</td>
-              <td>Cliente Nuevo</td>
-              <td>%</td>
-              <td>Ppto Acumulado</td>
-              <td>Comision Actual</td>
-              <td>Comision Nueva</td>
-              <td>Comisiones Total</td>
-              <td>Salario Total</td>
-            </tr>
-          </thead>
-          <tbody>
-              {body}
-          </tbody>
-        </table>
+        <div style={tableStyle} className="table-responsive">
+          <table className="table table-hover">
+            <thead style={headerStyle}>
+              <tr style={ auxHeadStyle }>
+                <td></td>
+                <td></td>
+                <td> </td>
+                <td style={ auxStyle } colSpan={2}>Venta Actual</td>
+                <td style={ auxStyle } colSpan={2}>Venta Nueva</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Mes</td>
+                <td>PptoVenta</td>
+                <td>Venta Ejecutada</td>
+                <td>% Cumplimiento</td>
+                <td>Cliente Facturando</td>
+                <td>%</td>
+                <td>Cliente Nuevo</td>
+                <td>%</td>
+                <td>Ppto Acumulado</td>
+                <td>Comision Actual</td>
+                <td>Comision Nueva</td>
+                <td>Salario Total</td>
+              </tr>
+            </thead>
+            <tbody>{body}</tbody>
+          </table>
+        </div>
       </>
     );
   }

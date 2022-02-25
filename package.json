@@ -13,8 +13,10 @@
     "material-table": "^1.69.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.2",
+    "react-currency-input-field": "^3.6.4",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
+    "react-select": "^5.2.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
