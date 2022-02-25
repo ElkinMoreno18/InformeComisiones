@@ -30,8 +30,8 @@ class TableRow extends React.Component {
   }
 
   calcularVentaEjecutada(e) {
-    const item = this.state.item;
-    const itemAnterior = this.state.itemAnterior;
+    const item = this.props.item;
+    const itemAnterior = this.props.itemAnterior;
     var newValor = parseInt(e.target.value);
     item.VentaEjecutada = newValor;
 
@@ -56,13 +56,12 @@ class TableRow extends React.Component {
         itemAnterior.VentaEjecutada;
     }
 
-    this.setState({
-      item: item,
-    });
+    this.props.updateItems(item);
+
   }
 
   calcularClienteFacturando(event) {
-    const item = this.state.item;
+    const item = this.props.item;
     var nuevoValor = parseInt(event.target.value);
     item.ClienteActual = nuevoValor;
 
@@ -74,14 +73,13 @@ class TableRow extends React.Component {
     item.ComisionAct =
       item.ClienteActual * this.Percentages(item.porcCumplimiento, "act");
 
-    this.setState({
-      item: item,
-    });
+      this.props.updateItems(item);
+
   }
 
   render() {
-    const item = this.state.item;
-    const itemAnterior = this.state.itemAnterior;
+    const item = this.props.item;
+    const itemAnterior = this.props.itemAnterior;
 
     item.porcCumplimiento =
       item.PresupuestoAcumulado > item.VentaEjecutada
@@ -104,7 +102,7 @@ class TableRow extends React.Component {
       item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new");
 
     item.salarioTotal =
-      item.ComisionAct + item.ComisionNue + parseInt(this.state.salarioMensual);
+      item.ComisionAct + item.ComisionNue + parseInt(this.props.salarioMensual);
 
     if (itemAnterior == null && item.month == 1) {
       item.month = 1;
@@ -145,6 +143,14 @@ class TableRow extends React.Component {
     });
 
     const porcentajeVentaNueva = Math.round(item.PorcentajeNuevo * 100);
+
+
+      // Crearia una funcion con el insert donde se le envien todos los datos, 
+      // En los metodos de table Data
+
+      
+
+
 
     // ------------------------------ STYLES --------------------------
 
