@@ -148,8 +148,9 @@ class TableRow extends React.Component {
       // Crearia una funcion con el insert donde se le envien todos los datos, 
       // En los metodos de table Data
 
+    insertDataInBD(){
       
-
+    }
 
 
     // ------------------------------ STYLES --------------------------
