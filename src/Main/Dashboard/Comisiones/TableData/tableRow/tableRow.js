@@ -57,7 +57,6 @@ class TableRow extends React.Component {
     }
 
     this.props.updateItems(item);
-
   }
 
   calcularClienteFacturando(event) {
@@ -73,13 +72,13 @@ class TableRow extends React.Component {
     item.ComisionAct =
       item.ClienteActual * this.Percentages(item.porcCumplimiento, "act");
 
-      this.props.updateItems(item);
-
+    this.props.updateItems(item);
   }
 
   render() {
     const item = this.props.item;
     const itemAnterior = this.props.itemAnterior;
+    const axios = require("axios");
 
     item.porcCumplimiento =
       item.PresupuestoAcumulado > item.VentaEjecutada
@@ -144,14 +143,19 @@ class TableRow extends React.Component {
 
     const porcentajeVentaNueva = Math.round(item.PorcentajeNuevo * 100);
 
+    // Crearia una funcion con el insert donde se le envien todos los datos,
+    // En los metodos de table Data
 
-      // Crearia una funcion con el insert donde se le envien todos los datos, 
-      // En los metodos de table Data
-
-    insertDataInBD(){
-      
+    function takeInfo() {
+      axios
+        .get()
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
-
 
     // ------------------------------ STYLES --------------------------
 

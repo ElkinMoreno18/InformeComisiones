@@ -5,10 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Component } from 'react';
 
+
 class App extends Component {
   render() {
     return(
-    <Main/>
+      <div style={{height: "100%"}}>
+    <Main />
+      </div>
     );
   }
 }

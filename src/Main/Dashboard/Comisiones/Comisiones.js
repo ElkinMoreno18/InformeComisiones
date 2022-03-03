@@ -1,7 +1,6 @@
 import React from "react";
 import Table from "./TableData/tableData";
 import "material-icons/iconfont/material-icons.css";
-import CurrencyInput from "react-currency-input-field";
 
 const options = [
   {
@@ -45,8 +44,6 @@ class Comisiones extends React.Component {
     });
   }
 
-
-
   cambioPresupuesto(presupuesto) {
     this.setState({
       presupuesto: presupuesto,
@@ -82,19 +79,12 @@ class Comisiones extends React.Component {
   }
 
   render() {
-
-    const prefix = "$ ";
-
     const styleContainer = {
-      width: "90%",
-      marginLeft: "5%",
-      marginRigth: "5%",
-      marginTop: "0.5%",
       textAlign: "center",
     };
-    const titleStyle = { paddingTop: "1%" };
+
     const styleTwoLastColumns = {
-      width: "74%",
+      width: "90%",
       margin: "auto",
       marginTop: "3%",
     };
@@ -102,7 +92,7 @@ class Comisiones extends React.Component {
     return (
       <>
         <div className="contenedor" style={styleContainer}>
-          <h2 style={titleStyle}>Informe de Comisiones</h2>
+          <h2>Informe de Comisiones</h2>
           <form>
             <div className="row w-100 align-items-start text-center p-3">
               <div className="col ">
@@ -121,7 +111,7 @@ class Comisiones extends React.Component {
                   onChange={this.handleChange}
                   name="selectRepresentante"
                 >
-                  <option value={"default"} selected>
+                  <option value={"general"} selected>
                     General
                   </option>
                   <optgroup label="Vendedores">
