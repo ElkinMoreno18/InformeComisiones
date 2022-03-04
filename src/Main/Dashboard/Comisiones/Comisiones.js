@@ -2,24 +2,6 @@ import React from "react";
 import Table from "./TableData/tableData";
 import "material-icons/iconfont/material-icons.css";
 
-const options = [
-  {
-    value: "leidy",
-    name: "Leidy Tangarife",
-  },
-  {
-    value: "andres",
-    name: "Andres Mesa",
-  },
-  {
-    value: "coordinador",
-    name: "Coordinador",
-  },
-  {
-    value: "general",
-    name: "General",
-  },
-];
 
 class Comisiones extends React.Component {
   constructor(props) {
@@ -84,8 +66,6 @@ class Comisiones extends React.Component {
     };
 
     const styleTwoLastColumns = {
-      width: "90%",
-      margin: "auto",
       marginTop: "3%",
     };
 
@@ -94,7 +74,7 @@ class Comisiones extends React.Component {
         <div className="contenedor" style={styleContainer}>
           <h2>Informe de Comisiones</h2>
           <form>
-            <div className="row w-100 align-items-start text-center p-3">
+            <div className="row w-100 align-items-start text-center p-1">
               <div className="col ">
                 <label
                   className="form-label"
@@ -203,7 +183,7 @@ class Comisiones extends React.Component {
               <div className="col">
                 <br />
                 <button
-                  className="btn btn-success"
+                  className="btn btn-success w-75"
                   onClick={this.submitForm}
                   disabled={this.state.activarButton ? false : true}
                   style={styleTwoLastColumns}

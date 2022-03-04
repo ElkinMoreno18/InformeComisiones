@@ -5,7 +5,7 @@ import MenuPage from "./Menu/Menu";
 import React from "react";
 import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import style from "./main.css";
+import main from "./main.css";
 import { Layout, Menu } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -18,6 +18,7 @@ const { Header, Sider, Content, Footer } = Layout;
 class Main extends React.Component {
   state = {
     collapsed: false,
+    mensaje: ""
   };
 
   toggle = () => {
@@ -26,12 +27,17 @@ class Main extends React.Component {
     });
   };
 
+
   render() {
+    const footerStyle = {height: "5%", lineHeight: "50%"}
+
     return (
-      <div className=`{style.main}`>
+      <div>
             <Layout>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-            <MenuPage></MenuPage>
+            <MenuPage collapsed={this.state.collapsed}>
+              <p> {this.state.mensaje} </p>
+            </MenuPage>
         </Sider>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }}>
@@ -47,14 +53,14 @@ class Main extends React.Component {
             className="site-layout-background"
             style={{
               margin: "10px 10px",
-              padding: 24,
+              padding: 10,
               height: "100%",
-              minHeight: 280,
+              minHeight: "100vh",
             }}
           >
             <Dashboard />
           </Content>
-          <Footer className="text-center"> &copy; Infinivirt 2022</Footer>
+          <Footer style={footerStyle} className="text-center"><FooterPage></FooterPage></Footer>
         </Layout>
       </Layout>
       </div>

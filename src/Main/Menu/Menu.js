@@ -1,34 +1,44 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import styles from "./styles.css";
+import logoTotal from "../../infinivirt_logo.png";
+import logoSmall from "../../nube_infinivirt.png";
 import "antd/dist/antd.css";
+import Ventas from "../Dashboard/Reportes/Ventas/Ventas";
 import { Menu } from "antd";
 
 import {
-    HomeOutlined,
-    ReconciliationOutlined,
-    AreaChartOutlined,
-    SolutionOutlined,
-    PhoneOutlined,
-    DownloadOutlined,
-    DashboardOutlined,
-    HistoryOutlined,
-    HddOutlined,
-    DollarOutlined,
-  } from "@ant-design/icons";
+  HomeOutlined,
+  ReconciliationOutlined,
+  AreaChartOutlined,
+  SolutionOutlined,
+  PhoneOutlined,
+  DownloadOutlined,
+  DashboardOutlined,
+  HistoryOutlined,
+  HddOutlined,
+  DollarOutlined,
+} from "@ant-design/icons";
 
-  const { SubMenu } = Menu;
+const { SubMenu } = Menu;
 
-const MenuPage = () => {
+
+const MenuPage = (props) => {
+  var collapsed = props.collapsed;
+
   return (
     <>
-      <div className="logo" />
+      <img
+        src={collapsed ? logoSmall : logoTotal}
+        className="logo bg-transparent"
+        id="logo"
+      />
       <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
         <Menu.Item key="1" icon={<HomeOutlined />}>
           Dashboard
         </Menu.Item>
-        <SubMenu key="sub1" icon={<AreaChartOutlined />} title="Reportes">
+        <SubMenu key="sub1" icon={<ReconciliationOutlined />} title="Reportes">
           <Menu.Item key="3" icon={<AreaChartOutlined />}>
-            Informe de Ventas
+              Informe de Ventas
           </Menu.Item>
           <Menu.Item key="4" icon={<SolutionOutlined />}>
             Informe de Margenes
@@ -52,7 +62,7 @@ const MenuPage = () => {
         <Menu.Item key="`0" icon={<DollarOutlined />}>
           Reporte de Comisiones
         </Menu.Item>
-        </Menu>
+      </Menu>
     </>
   );
 };
