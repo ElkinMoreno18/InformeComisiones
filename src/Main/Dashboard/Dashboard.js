@@ -1,16 +1,18 @@
 import Comisiones from "./Comisiones/Comisiones.js";
-import Ventas from "./Reportes/Ventas/Ventas"
+import Reportes from "./Reportes/Reportes";
 import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-class Dashboard extends React.Component {
-  render() {
+function Dashboard(){
     return (
-      <>
-      
-</>
-    )
-    ;
-  }
+        <>
+        <Reportes></Reportes>
+          <Routes>
+            <Route path="/Comisiones" element={<Comisiones />}></Route>
+          </Routes>
+      </>
+    );
 }
 
 export default Dashboard;

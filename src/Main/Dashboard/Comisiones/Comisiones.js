@@ -3,6 +3,7 @@ import Table from "./TableData/tableData";
 import "material-icons/iconfont/material-icons.css";
 
 
+
 class Comisiones extends React.Component {
   constructor(props) {
     super(props);
@@ -35,11 +36,9 @@ class Comisiones extends React.Component {
   }
 
   submitForm = (event) => {
-    var SalarioMensual = this.state.salario;
     var Presupuesto = this.state.presupuesto;
     var Meses = this.state.meses;
     this.state.presupuestoMensual = Math.round(Presupuesto / Meses);
-    var PresupuestoMensual = this.state.presupuestoMensual;
     event.preventDefault();
     this.setState({
       mostrarTabla: true,
@@ -72,10 +71,10 @@ class Comisiones extends React.Component {
     return (
       <>
         <div className="contenedor" style={styleContainer}>
-          <h2>Informe de Comisiones</h2>
+          <h3>Informe de Comisiones</h3>
           <form>
-            <div className="row w-100 align-items-start text-center p-1">
-              <div className="col ">
+            <div className="row w-100 align-items-end text-center p-1" style={{fontSize: "80%"}}>
+              <div className="col-3">
                 <label
                   className="form-label"
                   htmlFor="selectRepresentante"
@@ -86,7 +85,7 @@ class Comisiones extends React.Component {
                 <br />
                 <select
                   defaultValue={"default"}
-                  className="form-select"
+                  className="form-select form-select-sm"
                   value={this.state.representante}
                   onChange={this.handleChange}
                   name="selectRepresentante"
@@ -113,7 +112,7 @@ class Comisiones extends React.Component {
                 </label>
 
                 <input
-                  className="form-control"
+                  className="form-control form-control-sm"
                   type="number"
                   id="inputMonthSalary"
                   name="monthSalary"
@@ -134,7 +133,7 @@ class Comisiones extends React.Component {
                 </label>
                 <br />
                 <input
-                  className="form-control"
+                  className="form-control form-control-sm"
                   type="number"
                   id="inputPptoAnual"
                   name="pptoAnual"
@@ -145,13 +144,13 @@ class Comisiones extends React.Component {
                   disabled={this.state.activarCampos ? false : true}
                 />
               </div>
-              <div className="col">
+              <div className="col-1">
                 <label className="form-label" htmlFor="months" name="months">
                   Meses
                 </label>
                 <br />
                 <input
-                  className="form-control"
+                  className="form-control form-control-sm"
                   type="number"
                   id="inputMonths"
                   name="months"
@@ -159,7 +158,7 @@ class Comisiones extends React.Component {
                   disabled
                 />
               </div>
-              <div className="col">
+              <div className="col-2">
                 <label
                   className="form-label"
                   htmlFor="pptoMonth"
@@ -169,7 +168,7 @@ class Comisiones extends React.Component {
                 </label>
                 <br />
                 <input
-                  className="form-control"
+                  className="form-control form-control-sm"
                   type="number"
                   id="inputPptoMonth"
                   name="pptoMonth"
@@ -180,10 +179,10 @@ class Comisiones extends React.Component {
                   disabled
                 />
               </div>
-              <div className="col">
+              <div className="col me-0 pe-0">
                 <br />
                 <button
-                  className="btn btn-success w-75"
+                  className="btn btn-success w-75 me-0"
                   onClick={this.submitForm}
                   disabled={this.state.activarButton ? false : true}
                   style={styleTwoLastColumns}

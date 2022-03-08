@@ -1,5 +1,8 @@
 import React from "react";
 import TableRow from "./tableRow/tableRow";
+import { Button } from "antd";
+import { SaveOutlined } from "@ant-design/icons";
+
 
 class tableData extends React.Component {
   constructor(props) {
@@ -77,7 +80,9 @@ class tableData extends React.Component {
         );
       }
 
+
       return (
+        <>
         <TableRow
           item={item}
           itemAnterior={itemAnterior}
@@ -86,11 +91,13 @@ class tableData extends React.Component {
           updateItems={this.updateItems}
           representative={representative}
         />
+        </>
       );
     });
 
+
     const headerStyle = { backgroundColor: "rgb(0, 99, 71)", color: "White" };
-    const tableStyle = { marginTop: "0.5%" };
+    const tableStyle = { marginTop: "0.5%", fontSize: "80%" };
     const auxHeadStyle = { backgroundColor: "white", lineHeight: "100%" };
     const auxStyle = {
       backgroundColor: "#808080",

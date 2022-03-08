@@ -2,12 +2,16 @@ import React from "react";
 import AutosizeInput from "react-input-autosize";
 
 class TableRow extends React.Component {
+
+cajaData = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = {
       item: props.item,
       itemAnterior: props.itemAnterior,
       salarioMensual: props.salarioMensual,
+      status: false,
     };
   }
 
@@ -75,6 +79,11 @@ class TableRow extends React.Component {
     this.props.updateItems(item);
   }
 
+  sendData(month,ventaEjecutada, clienteActual ){
+    // Crear metodo de envio de informacion
+    console.log(month, ventaEjecutada, clienteActual)
+  }
+
   render() {
     const item = this.props.item;
     const itemAnterior = this.props.itemAnterior;
@@ -131,6 +140,7 @@ class TableRow extends React.Component {
       minimumFractionDigits: 0,
     });
 
+
     const porcentajeCumpli = Math.round(item.porcCumplimiento * 100);
 
     const porcentajeActu = Math.round(item.Porcentaje * 100);
@@ -157,6 +167,7 @@ class TableRow extends React.Component {
         });
     }
 
+
     // ------------------------------ STYLES --------------------------
 
     const columnInputStyle = { width: "150%", width: "150%" };
@@ -174,22 +185,28 @@ class TableRow extends React.Component {
               placeholder="Ingrese valor"
               type="number"
               onChange={(e) => this.calcularVentaEjecutada(e)}
+              ref={this.cajaData}
               value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
+              onBlur={() => this.sendData(item.month,item.VentaEjecutada,item.ClienteActual)}
               id={`VentaEjecutada${item.month}`}
               min="0"
+              inputStyle={{border: 'none'}}
             />
           </td>
           {/* Venta Ejecutada */}
           <td>{porcentajeCumpli + "%"}</td>
           <td>
-            <AutosizeInput
+             <AutosizeInput
               placeholder="Ingrese valor"
               type="number"
               onChange={(evt) => this.calcularClienteFacturando(evt)}
               value={item.ClienteActual == 0 ? "" : item.ClienteActual}
+              onBlur={() => this.sendData(item.month,item.VentaEjecutada,item.ClienteActual)}
               id={`ClienteActual${item.month}`}
               min="0"
+              inputStyle={{border: 'none'}}
             />
+
           </td>
           {/* Cliente Facturando */}
           <td>{porcentajeActu + "%"}</td>
