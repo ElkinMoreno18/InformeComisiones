@@ -2,8 +2,6 @@ import React from "react";
 import Table from "./TableData/tableData";
 import "material-icons/iconfont/material-icons.css";
 
-
-
 class Comisiones extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +14,7 @@ class Comisiones extends React.Component {
       representante: "",
       activarCampos: false,
       activarButton: false,
+      rol: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -73,7 +72,10 @@ class Comisiones extends React.Component {
         <div className="contenedor" style={styleContainer}>
           <h3>Informe de Comisiones</h3>
           <form>
-            <div className="row w-100 align-items-end text-center p-1" style={{fontSize: "80%"}}>
+            <div
+              className="row w-100 align-items-end text-center p-1"
+              style={{ fontSize: "80%" }}
+            >
               <div className="col-3">
                 <label
                   className="form-label"
@@ -88,6 +90,13 @@ class Comisiones extends React.Component {
                   className="form-select form-select-sm"
                   value={this.state.representante}
                   onChange={this.handleChange}
+                  onBlur={() => {
+                    if(this.state.representante != "Daniela"){
+                      this.state.rol = "vendedor"
+                    } else {
+                      this.state.rol = "coordinador"
+                    }
+                  }}
                   name="selectRepresentante"
                 >
                   <option value={"general"} selected>
@@ -96,6 +105,8 @@ class Comisiones extends React.Component {
                   <optgroup label="Vendedores">
                     <option value="Leidy">Leidy tangarife</option>
                     <option value="Andres">Andres Mesa</option>
+                    <option value="Sergio">Sergio Muñoz</option>
+                    <option value="Sandra">Sandra Ramos</option>
                   </optgroup>
                   <optgroup label="Coordinadores">
                     <option value="Daniela">Daniela Zapata</option>

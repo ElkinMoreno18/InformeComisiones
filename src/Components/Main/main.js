@@ -1,13 +1,11 @@
 import Dashboard from "./Dashboard/Dashboard";
-import HeaderPage from "./Header/header";
 import FooterPage from "./Footer/Footer";
 import MenuPage from "./Menu/Menu";
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import "antd/dist/antd.css";
-import main from "./main.css";
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
+
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -35,12 +33,15 @@ class Main extends React.Component {
             </MenuPage>
           </Sider>
           <Layout className="site-layout">
-            <Header className="site-layout-background" style={{ padding: 0 }}>
+            <Header className="site-layout-background" style={{ backgroundColor: "white", height: "7%" }}>
               {React.createElement(
                 this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
                 {
                   className: "trigger",
                   onClick: this.toggle,
+                  style:{
+                    marginTop: "0%"
+                  }
                 }
               )}
             </Header>

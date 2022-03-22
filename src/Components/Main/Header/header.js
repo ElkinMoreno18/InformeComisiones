@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../infinivirt_logo.png";
+import logo from "../../../infinivirt_logo.png";
 
 class Header extends React.Component {
   render() {

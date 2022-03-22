@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react";
 import styles from "./styles.css";
-import logoTotal from "../../infinivirt_logo.png";
-import logoSmall from "../../nube_infinivirt.png";
+import logoTotal from "../../../infinivirt_logo.png";
+import logoSmall from "../../../nube_infinivirt.png";
 import "antd/dist/antd.css";
 import Ventas from "../Dashboard/Reportes/Ventas/Ventas";
 import { Menu } from "antd";
@@ -18,6 +18,7 @@ import {
   HistoryOutlined,
   HddOutlined,
   DollarOutlined,
+  CalculatorOutlined
 } from "@ant-design/icons";
 
 const { SubMenu } = Menu;
@@ -32,6 +33,7 @@ const MenuPage = (props) => {
     <>
       <img
         src={collapsed ? logoSmall : logoTotal}
+        style={collapsed ? {} : {width: '70%', marginInline: '15%', height: '5%' }}
         className="logo bg-transparent"
         id="logo"
       />
@@ -62,8 +64,11 @@ const MenuPage = (props) => {
         <Menu.Item key="9" icon={<HddOutlined />}>
         <Link to='/Activos'/>Inventario de Activos
         </Menu.Item>
-        <Menu.Item key="`0" icon={<DollarOutlined />}>
+        <Menu.Item key="`10" icon={<DollarOutlined />}>
         <Link to='/Comisiones' />Reporte de Comisiones
+        </Menu.Item>
+        <Menu.Item key="`11" icon={<CalculatorOutlined />}>
+        <Link to='/RTL' />Calculo de RTL
         </Menu.Item>
       </Menu>
     </>

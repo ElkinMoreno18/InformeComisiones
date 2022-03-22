@@ -1,17 +1,22 @@
 import React from "react";
 import AutosizeInput from "react-input-autosize";
+import axios from "axios";
+
+var url_base = "http://localhost:8080";
+var fecha = new Date();
 
 class TableRow extends React.Component {
-
-cajaData = React.createRef();
-
   constructor(props) {
     super(props);
     this.state = {
       item: props.item,
       itemAnterior: props.itemAnterior,
       salarioMensual: props.salarioMensual,
-      status: false,
+      representative: props.representative,
+      pptoAnual: props.pptoAnual,
+      pptoMensual: props.pptoMensual,
+      data: props.data,
+      rol: props.rol,
     };
   }
 
@@ -79,15 +84,48 @@ cajaData = React.createRef();
     this.props.updateItems(item);
   }
 
-  sendData(month,ventaEjecutada, clienteActual ){
+  sendData() {
     // Crear metodo de envio de informacion
-    console.log(month, ventaEjecutada, clienteActual)
+    const item = this.props.item;
+    const representative = this.props.representative;
+    const monthSalary = parseInt(this.props.salarioMensual);
+    const pptoMensual = this.props.pptoMensual;
+    const pptoAnual = parseInt(this.props.pptoAnual);
+    const rol = this.props.rol;
+    var request = url_base + "/api/tests/" + item.month + "/" + representative;
+    var info = {
+      months: item.month,
+      pptoVenta: item.pptoVenta,
+      VentaEjecutada: item.VentaEjecutada,
+      Cumplimiento: item.porcCumplimiento,
+      VentaActual: item.ClienteActual,
+      PorcentajeVentaActual: item.Porcentaje,
+      VentaNueva: item.ClienteNuevo,
+      PorcentajeVentaNueva: item.PorcentajeNuevo,
+      PresupuestoAcumulado: item.PresupuestoAcumulado,
+      ComisionAct: item.ComisionAct,
+      ComisionNue: item.ComisionNue,
+      salarioTotal: item.salarioTotal,
+      usuarioLogueado: "prueba",
+      representante: representative,
+      monthSalary: monthSalary,
+      pptoMensual: pptoMensual,
+      pptoAnual: pptoAnual,
+      rol:rol,
+    };
+    console.log(info);
+    axios.put(request, info).then((res) => {
+      this.setState({
+        status: true,
+      });
+      console.log(res);
+    });
   }
 
   render() {
+
     const item = this.props.item;
     const itemAnterior = this.props.itemAnterior;
-    const axios = require("axios");
 
     item.porcCumplimiento =
       item.PresupuestoAcumulado > item.VentaEjecutada
@@ -106,17 +144,12 @@ cajaData = React.createRef();
 
     item.ClienteNuevo = Math.round(item.VentaEjecutada * item.PorcentajeNuevo);
 
-    item.ComisionNue =
-      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new");
+    item.ComisionNue = Math.round(
+      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new")
+    );
 
     item.salarioTotal =
       item.ComisionAct + item.ComisionNue + parseInt(this.props.salarioMensual);
-
-    if (itemAnterior == null && item.month == 1) {
-      item.month = 1;
-      item.VentaEjecutada = "-";
-      item.porcCumplimiento = "-";
-    }
 
     if (itemAnterior == null && item.month == 2) {
       item.PresupuestoAcumulado = item.pptoVenta;
@@ -126,6 +159,7 @@ cajaData = React.createRef();
                ? item.VentaEjecutada
                : itemAnterior.ClienteNuevo;
       */
+
       item.PresupuestoAcumulado =
         item.pptoVenta +
         itemAnterior.PresupuestoAcumulado -
@@ -140,7 +174,6 @@ cajaData = React.createRef();
       minimumFractionDigits: 0,
     });
 
-
     const porcentajeCumpli = Math.round(item.porcCumplimiento * 100);
 
     const porcentajeActu = Math.round(item.Porcentaje * 100);
@@ -153,19 +186,33 @@ cajaData = React.createRef();
 
     const porcentajeVentaNueva = Math.round(item.PorcentajeNuevo * 100);
 
+    const presupuestoAcum = item.PresupuestoAcumulado.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
+    const comiActualPesos = item.ComisionAct.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
+    const comiNuevaPesos = item.ComisionNue.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
+    const salarioPesos = item.salarioTotal.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
     // Crearia una funcion con el insert donde se le envien todos los datos,
     // En los metodos de table Data
-
-    function takeInfo() {
-      axios
-        .get()
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+    ///////////////////////////////////////////////////////
 
 
     // ------------------------------ STYLES --------------------------
@@ -185,61 +232,35 @@ cajaData = React.createRef();
               placeholder="Ingrese valor"
               type="number"
               onChange={(e) => this.calcularVentaEjecutada(e)}
-              ref={this.cajaData}
               value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
-              onBlur={() => this.sendData(item.month,item.VentaEjecutada,item.ClienteActual)}
+              onBlur={() => this.sendData(item)}
               id={`VentaEjecutada${item.month}`}
               min="0"
-              inputStyle={{border: 'none'}}
+              inputStyle={{ border: "none" }}
             />
           </td>
           {/* Venta Ejecutada */}
           <td>{porcentajeCumpli + "%"}</td>
           <td>
-             <AutosizeInput
+            <AutosizeInput
               placeholder="Ingrese valor"
               type="number"
               onChange={(evt) => this.calcularClienteFacturando(evt)}
               value={item.ClienteActual == 0 ? "" : item.ClienteActual}
-              onBlur={() => this.sendData(item.month,item.VentaEjecutada,item.ClienteActual)}
               id={`ClienteActual${item.month}`}
+              onBlur={() => this.sendData(item)}
               min="0"
-              inputStyle={{border: 'none'}}
+              inputStyle={{ border: "none" }}
             />
-
           </td>
           {/* Cliente Facturando */}
           <td>{porcentajeActu + "%"}</td>
           <td>{ventaClienteNuevo}</td>
           <td>{porcentajeVentaNueva + "%"}</td>
-          <td>
-            {item.PresupuestoAcumulado.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-              minimumFractionDigits: 0,
-            })}
-          </td>
-          <td>
-            {item.ComisionAct.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-              minimumFractionDigits: 0,
-            })}
-          </td>
-          <td>
-            {item.ComisionNue.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-              minimumFractionDigits: 0,
-            })}
-          </td>
-          <td>
-            {item.salarioTotal.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-              minimumFractionDigits: 0,
-            })}
-          </td>
+          <td>{presupuestoAcum}</td>
+          <td>{comiActualPesos}</td>
+          <td>{comiNuevaPesos}</td>
+          <td>{salarioPesos}</td>
         </tr>
       </>
     );
