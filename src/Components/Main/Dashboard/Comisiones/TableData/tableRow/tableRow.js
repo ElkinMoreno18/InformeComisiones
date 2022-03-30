@@ -1,9 +1,12 @@
 import React from "react";
 import AutosizeInput from "react-input-autosize";
 import axios from "axios";
+import CurrencyFormat from "react-currency-format";
 
 var url_base = "http://localhost:8080";
 var fecha = new Date();
+var firstSale = "";
+var mostrar = '';
 
 class TableRow extends React.Component {
   constructor(props) {
@@ -17,22 +20,48 @@ class TableRow extends React.Component {
       pptoMensual: props.pptoMensual,
       data: props.data,
       rol: props.rol,
+      firstSale: props.firstSale,
     };
   }
 
-  Percentages(value, string) {
+  Percentages(value, string, rol) {
+
     var porc = 0;
-    if (value < 0.5) {
+    if (value < 0.5 && rol === "vendedor") {
       porc = string == "act" ? 0.004 : 0.008;
-    } else if (value > 0.51 && value < 0.6) {
+    } else if (value > 0.51 && value < 0.6 && rol == "vendedor") {
       porc = string == "act" ? 0.005 : 0.0093;
-    } else if (value > 0.61 && value < 0.7) {
+    } else if (value > 0.61 && value < 0.7 && rol == "vendedor") {
       porc = string == "act" ? 0.006 : 0.0095;
-    } else if (value > 0.71 && value < 0.8) {
+    } else if (value > 0.71 && value < 0.8 && rol == "vendedor") {
       porc = string == "act" ? 0.006 : 0.0096;
-    } else if (value > 0.81 && value < 0.9) {
+    } else if (value > 0.81 && value < 0.9 && rol == "vendedor") {
       porc = string == "act" ? 0.006 : 0.0098;
-    } else if (value > 0.91 && value < 1.0) {
+    } else if (value > 0.91 && value < 1.0 && rol == "vendedor") {
+      porc = string == "act" ? 0.006 : 0.0098;
+    } else if (value < 0.5 && rol === "coordinador") {
+      porc = string == "act" ? 0.001 : 0.0045;
+    } else if (value > 0.51 && value < 0.6 && rol == "coordinador") {
+      porc = string == "act" ? 0.001 : 0.0045;
+    } else if (value > 0.61 && value < 0.7 && rol == "coordinador") {
+      porc = string == "act" ? 0.001 : 0.0045;
+    } else if (value > 0.71 && value < 0.8 && rol == "coordinador") {
+      porc = string == "act" ? 0.001 : 0.0045;
+    } else if (value > 0.81 && value < 0.9 && rol == "coordinador") {
+      porc = string == "act" ? 0.001 : 0.0045;
+    } else if (value > 0.91 && value < 1.0 && rol == "coordinador") {
+      porc = string == "act" ? 0.001 : 0.0045;
+    } else if (value < 0.5 && rol == "general") {
+      porc = string == "act" ? 0.004 : 0.008;
+    } else if (value > 0.51 && value < 0.6 && rol == "general") {
+      porc = string == "act" ? 0.005 : 0.0093;
+    } else if (value > 0.61 && value < 0.7 && rol == "general") {
+      porc = string == "act" ? 0.006 : 0.0095;
+    } else if (value > 0.71 && value < 0.8 && rol == "general") {
+      porc = string == "act" ? 0.006 : 0.0096;
+    } else if (value > 0.81 && value < 0.9 && rol == "general") {
+      porc = string == "act" ? 0.006 : 0.0098;
+    } else if (value > 0.91 && value < 1.0 && rol == "general") {
       porc = string == "act" ? 0.006 : 0.0098;
     }
     return porc;
@@ -41,20 +70,25 @@ class TableRow extends React.Component {
   calcularVentaEjecutada(e) {
     const item = this.props.item;
     const itemAnterior = this.props.itemAnterior;
-    var newValor = parseInt(e.target.value);
-    item.VentaEjecutada = newValor;
 
-    item.porcCumplimiento =
-      item.PresupuestoAcumulado > item.VentaEjecutada
-        ? item.VentaEjecutada / item.PresupuestoAcumulado
-        : 0;
+     if (e != null) {
+      var calculateNumber = e.replace(/\./g, "");
+      var doubleNumber = calculateNumber.replace(/\,/g, ".")
+    }
+    var num = parseFloat(doubleNumber);
 
-    item.Porcentaje =
-      item.VentaEjecutada > item.ClienteActual
-        ? item.ClienteActual / item.VentaEjecutada
-        : 0;
+    mostrar = e;
+    item.VentaEjecutada = num;
 
-    item.ClienteNuevo = item.VentaEjecutada * item.PorcentajeNuevo;
+    if (item.month == 1) {
+      firstSale = item.VentaEjecutada;
+    } 
+
+     item.porcCumplimiento =
+      item.PresupuestoAcumulado > num ? num / item.PresupuestoAcumulado : 0;
+    item.Porcentaje = num > item.ClienteActual ? item.ClienteActual / num : 0;
+
+    item.ClienteNuevo = num * item.PorcentajeNuevo;
 
     if (itemAnterior == null) {
       item.pptoAcumulado = item.pptoVenta;
@@ -64,34 +98,51 @@ class TableRow extends React.Component {
         itemAnterior.pptoAcumulado -
         itemAnterior.VentaEjecutada;
     }
-
     this.props.updateItems(item);
   }
 
   calcularClienteFacturando(event) {
     const item = this.props.item;
-    var nuevoValor = parseInt(event.target.value);
-    item.ClienteActual = nuevoValor;
+    const rol = this.props.rol;
+
+    if (event != null) {
+      var calculateNumber = event.replace(/\./g, "");
+      var doubleNumber = calculateNumber.replace(/\,/g, ".")
+    }
+
+    var number = parseFloat(doubleNumber);
+
+    var mostrarActual = event;
+    item.ClienteActual = number;
 
     item.Porcentaje =
-      item.VentaEjecutada > item.ClienteActual
-        ? item.ClienteActual / item.VentaEjecutada
-        : 0;
+      item.VentaEjecutada > number ? number / item.VentaEjecutada : 0;
 
     item.ComisionAct =
-      item.ClienteActual * this.Percentages(item.porcCumplimiento, "act");
+      number * this.Percentages(item.porcCumplimiento, "act", rol);
 
-    this.props.updateItems(item);
+   this.props.updateItems(item);
   }
 
   sendData() {
     // Crear metodo de envio de informacion
     const item = this.props.item;
     const representative = this.props.representative;
-    const monthSalary = parseInt(this.props.salarioMensual);
+    const monthSalary = parseFloat(this.props.salarioMensual);
     const pptoMensual = this.props.pptoMensual;
-    const pptoAnual = parseInt(this.props.pptoAnual);
-    const rol = this.props.rol;
+    const pptoAnual = parseFloat(this.props.pptoAnual);
+    var rol = this.props.rol;
+    var presupuestoAn = 0;
+
+    if (representative === "general") {
+      rol = "general";
+      presupuestoAn = pptoAnual / 4;
+    } else if (representative === "Daniela") {
+      presupuestoAn = pptoAnual / 4;
+    } else {
+      presupuestoAn = pptoAnual;
+    }
+
     var request = url_base + "/api/tests/" + item.month + "/" + representative;
     var info = {
       months: item.month,
@@ -110,22 +161,30 @@ class TableRow extends React.Component {
       representante: representative,
       monthSalary: monthSalary,
       pptoMensual: pptoMensual,
-      pptoAnual: pptoAnual,
-      rol:rol,
+      pptoAnual: presupuestoAn,
+      rol: rol,
     };
-    console.log(info);
     axios.put(request, info).then((res) => {
       this.setState({
         status: true,
       });
-      console.log(res);
     });
+
   }
 
   render() {
-
     const item = this.props.item;
     const itemAnterior = this.props.itemAnterior;
+    const rol = this.props.rol;
+    var inactiveMonth = false;
+
+    /* if (item.month < fecha.getMonth()+1) {
+      inactiveMonth = true;
+    } */
+
+
+   // this.mostrar = item.VentaEjecutada;
+    this.mostrarActual = item.ClienteActual;
 
     item.porcCumplimiento =
       item.PresupuestoAcumulado > item.VentaEjecutada
@@ -140,12 +199,12 @@ class TableRow extends React.Component {
     item.PorcentajeNuevo = 1 - item.Porcentaje;
 
     item.ComisionAct =
-      item.ClienteActual * this.Percentages(item.porcCumplimiento, "act");
+      item.ClienteActual * this.Percentages(item.porcCumplimiento, "act", rol);
 
     item.ClienteNuevo = Math.round(item.VentaEjecutada * item.PorcentajeNuevo);
 
     item.ComisionNue = Math.round(
-      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new")
+      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new", rol)
     );
 
     item.salarioTotal =
@@ -159,68 +218,87 @@ class TableRow extends React.Component {
                ? item.VentaEjecutada
                : itemAnterior.ClienteNuevo;
       */
-
-      item.PresupuestoAcumulado =
-        item.pptoVenta +
-        itemAnterior.PresupuestoAcumulado -
-        itemAnterior.VentaEjecutada;
+      if (item.month == 3) {
+        item.PresupuestoAcumulado =
+          item.pptoVenta +
+          itemAnterior.PresupuestoAcumulado -
+          firstSale -
+          itemAnterior.VentaEjecutada;
+      } else {
+        item.PresupuestoAcumulado =
+          item.pptoVenta +
+          itemAnterior.PresupuestoAcumulado -
+          itemAnterior.VentaEjecutada;
+      }
     }
 
     ////////////////////////////////////////////////////////////////////
 
-    const presuVenta = item.pptoVenta.toLocaleString("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
+    const presuVenta = item.pptoVenta.toLocaleString("es-CO");
 
     const porcentajeCumpli = Math.round(item.porcCumplimiento * 100);
 
     const porcentajeActu = Math.round(item.Porcentaje * 100);
 
-    const ventaClienteNuevo = item.ClienteNuevo.toLocaleString("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
+    const ventaClienteNuevo = item.ClienteNuevo.toLocaleString("es-CO");
 
     const porcentajeVentaNueva = Math.round(item.PorcentajeNuevo * 100);
 
-    const presupuestoAcum = item.PresupuestoAcumulado.toLocaleString("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
+    const presupuestoAcum = item.PresupuestoAcumulado.toLocaleString("es-CO");
 
-    const comiActualPesos = item.ComisionAct.toLocaleString("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
+    const comiActualPesos = item.ComisionAct.toLocaleString("es-CO");
 
-    const comiNuevaPesos = item.ComisionNue.toLocaleString("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
+    const comiNuevaPesos = item.ComisionNue.toLocaleString("es-CO");
 
-    const salarioPesos = item.salarioTotal.toLocaleString("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
+    const salarioPesos = item.salarioTotal.toLocaleString("es-CO");
 
     // Crearia una funcion con el insert donde se le envien todos los datos,
     // En los metodos de table Data
     ///////////////////////////////////////////////////////
 
-
     // ------------------------------ STYLES --------------------------
 
     const columnInputStyle = { width: "150%", width: "150%" };
     const inputStyle = { backgroundColor: "red" };
-
     // ----------------------------- CODE HTML RETURN -------------------
+
+    if (item.month == 1) {
+      return (
+        <>
+          <tr>
+            <td>{item.month}</td>
+            <td>-</td>
+            <td>
+              <CurrencyFormat
+                placeholder="Ingrese valor"
+                type="text"
+                thousandSeparator="."
+                decimalSeparator=","
+                decimalScale={3}
+                className="form-control form-control-sm CurrencyInput"
+                onChange={(e) => this.calcularVentaEjecutada(e.target.value)}
+                value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
+                onBlur={() => this.sendData(item)}
+                id={`VentaEjecutada${item.month}`}
+                min="0"
+                disabled={inactiveMonth}
+                style={{ border: "none", width: "120%" }}
+              />
+            </td>
+            {/* Venta Ejecutada */}
+            <td> - %</td>
+            <td> - </td>
+            <td> - %</td>
+            <td> - </td>
+            <td> - %</td>
+            <td> - </td>
+            <td> - </td>
+            <td> - </td>
+            <td> - </td>
+          </tr>
+        </>
+      );
+    }
 
     return (
       <>
@@ -228,29 +306,40 @@ class TableRow extends React.Component {
           <td>{item.month}</td>
           <td>{presuVenta}</td>
           <td>
-            <AutosizeInput
+            <CurrencyFormat
               placeholder="Ingrese valor"
-              type="number"
-              onChange={(e) => this.calcularVentaEjecutada(e)}
+              type="text"
+              thousandSeparator="."
+              decimalSeparator=","
+              decimalScale={3}
+              className="form-control form-control-sm CurrencyInput"
+              onChange={(e) => this.calcularVentaEjecutada(e.target.value)}
               value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
               onBlur={() => this.sendData(item)}
               id={`VentaEjecutada${item.month}`}
               min="0"
-              inputStyle={{ border: "none" }}
+              disabled={inactiveMonth}
+              style={{ border: "none", width: "120%" }}
             />
           </td>
           {/* Venta Ejecutada */}
           <td>{porcentajeCumpli + "%"}</td>
           <td>
-            <AutosizeInput
+            <CurrencyFormat
+              className="form-control form-control-sm CurrencyInput"
               placeholder="Ingrese valor"
-              type="number"
-              onChange={(evt) => this.calcularClienteFacturando(evt)}
-              value={item.ClienteActual == 0 ? "" : item.ClienteActual}
+              type="text"
+              thousandSeparator="."
+              decimalSeparator=","
+              onChange={(evt) =>
+                this.calcularClienteFacturando(evt.target.value)
+              }
+              disabled={inactiveMonth}
+              value={item.ClienteActual == 0 ? "" : this.mostrarActual}
               id={`ClienteActual${item.month}`}
               onBlur={() => this.sendData(item)}
               min="0"
-              inputStyle={{ border: "none" }}
+              inputStyle={{ border: "none", width: "120%" }}
             />
           </td>
           {/* Cliente Facturando */}

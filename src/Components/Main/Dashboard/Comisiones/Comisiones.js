@@ -1,6 +1,10 @@
 import React from "react";
 import Table from "./TableData/tableData";
+import axios from "axios";
+import CurrencyFormat from "react-currency-format";
 import "material-icons/iconfont/material-icons.css";
+
+var url_base = "http://localhost:8080";
 
 class Comisiones extends React.Component {
   constructor(props) {
@@ -12,6 +16,7 @@ class Comisiones extends React.Component {
       presupuestoMensual: "",
       mostrarTabla: false,
       representante: "",
+      datos: [],
       activarCampos: false,
       activarButton: false,
       rol: "",
@@ -30,7 +35,6 @@ class Comisiones extends React.Component {
     this.setState({
       presupuesto: presupuesto,
       presupuestoMensual: Math.round(presupuesto / 10),
-      activarButton: true,
     });
   }
 
@@ -45,16 +49,21 @@ class Comisiones extends React.Component {
   };
 
   handleChange(event) {
-    if (event.target.value !== "general") {
       this.setState({
         salario: "",
         presupuesto: "",
         mostrarTabla: false,
+        representante: event.target.value,
+        activarCampos: true,
       });
-    }
-    this.setState({
-      representante: event.target.value,
-      activarCampos: true,
+    
+    var representative = event.target.value;
+    var request = "/api/tests/" + representative;
+    // + fecha.getMonth() + "/" + this.props.data.representante;
+    axios.get(url_base + request).then((res) => {
+      this.setState({
+        datos: res.data,
+      });
     });
   }
 
@@ -66,6 +75,21 @@ class Comisiones extends React.Component {
     const styleTwoLastColumns = {
       marginTop: "3%",
     };
+
+    var data = this.state.datos;
+
+    if (data.length > 0) {
+      data.forEach((element) => {
+        this.state.salario = element.monthSalary;
+        this.state.presupuesto = element.pptoAnual;
+      });
+    }
+
+    if (this.state.salario > 0 && this.state.presupuesto > 0) {
+      this.state.activarButton = true;
+    } else {
+      this.state.activarButton = false;
+    }
 
     return (
       <>
@@ -91,17 +115,20 @@ class Comisiones extends React.Component {
                   value={this.state.representante}
                   onChange={this.handleChange}
                   onBlur={() => {
-                    if(this.state.representante != "Daniela"){
-                      this.state.rol = "vendedor"
+                    if (this.state.representante != "Daniela") {
+                      this.state.rol = "vendedor";
+                    } else if (this.state.representante === "general") {
+                      this.state.rol = "general";
                     } else {
-                      this.state.rol = "coordinador"
+                      this.state.rol = "coordinador";
                     }
                   }}
                   name="selectRepresentante"
                 >
-                  <option value={"general"} selected>
-                    General
+                  <option selected hidden>
+                    Seleccione
                   </option>
+                  <option value="general">General</option>
                   <optgroup label="Vendedores">
                     <option value="Leidy">Leidy tangarife</option>
                     <option value="Andres">Andres Mesa</option>
@@ -121,12 +148,13 @@ class Comisiones extends React.Component {
                 >
                   Salario Mensual
                 </label>
-
-                <input
-                  className="form-control form-control-sm"
-                  type="number"
+                <CurrencyFormat
+                  className="form-control form-control-sm CurrencyInput"
+                  type="text"
                   id="inputMonthSalary"
                   name="monthSalary"
+                  thousandSeparator="."
+                  decimalSeparator=","
                   value={this.state.salario}
                   onChange={(ev) => {
                     this.cambioSalario(ev.target.value);
@@ -143,12 +171,14 @@ class Comisiones extends React.Component {
                   Presupuesto Anual
                 </label>
                 <br />
-                <input
-                  className="form-control form-control-sm"
-                  type="number"
+                <CurrencyFormat
+                  className="form-control form-control-sm CurrencyInput"
+                  type="text"
                   id="inputPptoAnual"
                   name="pptoAnual"
                   value={this.state.presupuesto}
+                  thousandSeparator="."
+                  decimalSeparator=","
                   onChange={(ev) => {
                     this.cambioPresupuesto(ev.target.value);
                   }}
@@ -178,11 +208,13 @@ class Comisiones extends React.Component {
                   Presupuesto Mensual
                 </label>
                 <br />
-                <input
-                  className="form-control form-control-sm"
-                  type="number"
+                <CurrencyFormat
+                  className="form-control form-control-sm CurrencyInput"
+                  type="text"
                   id="inputPptoMonth"
                   name="pptoMonth"
+                  thousandSeparator="."
+                  decimalSeparator=","
                   value={Math.round(this.state.presupuesto / this.state.meses)}
                   onChange={(ev) => {
                     this.cambioPresupuestoMensual(ev.target.value);

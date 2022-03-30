@@ -1,7 +1,7 @@
 import React from "react";
 import TableRow from "./tableRow/tableRow";
 import { Button } from "antd";
-import { SaveOutlined } from "@ant-design/icons";
+import CurrencyFormat from "react-currency-format";
 import axios from "axios";
 
 var url_base = "http://localhost:8080";
@@ -14,13 +14,14 @@ class tableData extends React.Component {
       items: [],
       datos: [],
       method: "consult",
+      firstSale: '',
     };
     this.updateItems = this.updateItems.bind(this);
   }
 
   MonthPresupuesto = this.props.data.presupuestoMensual;
 
-  crearFila(months, presupuestoVenta) {
+  /* crearFila(months, presupuestoVenta) {
     return {
       month: months,
       pptoVenta: presupuestoVenta,
@@ -35,56 +36,56 @@ class tableData extends React.Component {
       ComisionNue: 0,
       salarioTotal: 0,
     };
-  }
+  } */
 
   consultFila(data) {
-    var pptoVenta = parseInt(data.pptoVenta);
-    var VentaEjecutada = parseInt(data.VentaEjecutada);
-    var Cumplimiento = parseInt(data.Cumplimiento);
-    var ClienteActual = parseInt(data.VentaActual);
-    var PorcentajeAct = parseInt(data.PorcentajeVentaActual);
-    var ClienteNuevo = parseInt(data.VentaNuevo);
-    var PorcentajeNuevo = parseInt(data.PorcentajeVentaNuevo);
-    var PresupuestoAcumulado = parseInt(data.PresupuestoAcumulado);
-    var ComisionAct = parseInt(data.ComisionAct);
-    var ComisionNue = parseInt(data.ComisionNue);
-    var salarioTotal = parseInt(data.salarioTotal);
     return {
       month: data.months,
-      pptoVenta: pptoVenta,
-      VentaEjecutada: VentaEjecutada,
-      porcCumplimiento: Cumplimiento,
-      ClienteActual: ClienteActual,
-      Porcentaje: PorcentajeAct,
-      ClienteNuevo: ClienteNuevo,
-      PorcentajeNuevo: PorcentajeNuevo,
-      PresupuestoAcumulado: PresupuestoAcumulado,
-      ComisionAct: ComisionAct,
-      ComisionNue: ComisionNue,
-      salarioTotal: salarioTotal,
+      pptoVenta: data.pptoVenta,
+      VentaEjecutada: data.VentaEjecutada,
+      porcCumplimiento: data.Cumplimiento,
+      ClienteActual: data.VentaActual,
+      Porcentaje: data.PorcentajeVentaActual,
+      ClienteNuevo: data.VentaNueva,
+      PorcentajeNuevo: data.PorcentaVentaNuevo,
+      PresupuestoAcumulado: data.PresupuestoAcumulado,
+      ComisionAct: data.ComisionAct,
+      ComisionNue: data.ComisionNue,
+      salarioTotal: data.salarioTotal,
     };
   }
 
   updateItems(item, index) {
+    console.log(item)
+    console.log(index)
     const items = this.state.items;
+    console.log(this.state.items)
     items[index] = item;
     this.setState({
       items: items,
     });
   }
 
+  SetFirstSale(firstSale) {
+   this.setState({
+     firstSale: firstSale,
+   })
+  }
+
+
+
   // METODO DE CONSUMO API PARA CONSULTAR INFORMACION
 
   consultData() {
     var representative = this.props.data.representante;
-    if(representative != "Daniela"){
-      var request = "/api/tests/" + representative;
+    //  if(representative != "Daniela"){
+    var request = "/api/tests/" + representative;
     axios.get(url_base + request).then((res) => {
       this.setState({
         datos: res.data,
       });
     });
-    } else {
+    /*  } else {
       var request = "/api/tests/coordinator/" + representative;
       // + fecha.getMonth() + "/" + this.props.data.representante;
       axios.get(url_base + request).then((res) => {
@@ -92,53 +93,68 @@ class tableData extends React.Component {
           datos: res.data,
         });
       });
-    }
-   
+    } */
   }
 
   componentDidMount() {
     this.consultData();
   }
 
-
   render() {
+
     var monthPpto = this.props.data.presupuestoMensual;
     var monthSalary = this.props.data.salario;
     var representative = this.props.data.representante;
     var pptoAnual = this.props.data.presupuesto;
     var rol = this.props.data.rol;
     var data = this.state.datos;
-    
-    if (this.state.method == "consult" && this.state.items.length == 0 && data.length > 0) {
-      this.state.items.push(this.crearFila(1, "-"));
-        data.forEach((element) => {
-          this.state.items.push(this.consultFila(element));
-        });
-      //  console.log(this.state.items);
+    var inactiveMonth = false;
+
+    if (representative === "general") {
+      rol = "general";
     }
 
-    // console.log(data)
-   /*  if (this.state.items.length == 0) {
-      this.state.items.push(this.crearFila(1, "-"));
-      for (let index = 1; index < 12; index++) {
-        this.state.items.push(this.crearFila(index + 1, monthPpto));
-      }
-    } */
+    if (
+      this.state.method == "consult" && this.state.items.length == 0 && data.length > 0) {
+     // this.state.items.push(this.crearFila(1, "-"));
+      data.forEach((element) => {
+        this.state.items.push(this.consultFila(element));
+      });
+    }
+
 
     let itemAnterior = null;
+console.log(this.state)    
 
     const body = this.state.items.map((item, index) => {
       if (index > 1) {
         itemAnterior = this.state.items[index - 1];
       }
 
-      if (index == 0) {
+     /*  if (item.month < fecha.getMonth()+1) {
+        inactiveMonth = true;
+      } */
+
+    /*   if (index < 1) {
         return (
           <tr>
             <td>{item.month}</td>
             <td>-</td>
-            <td>-</td>
-            <td>-</td>
+            <td>
+            <CurrencyFormat
+              placeholder="Ingrese valor"
+              type="text"
+              thousandSeparator="."
+              decimalSeparator=","
+              className="form-control form-control-sm CurrencyInput"
+              onChange={(e) => {this.SetFirstSale(e.target.value);}}
+              onBlur={() => this.sendFirstSale()}
+              disabled={inactiveMonth}
+              value={this.state.firstSale}
+              style={{ border: "none", width: "120%" }}
+            />
+          </td>
+            <td>-</td>      
             <td>-</td>
             <td>-</td>
             <td>-</td>
@@ -149,7 +165,8 @@ class tableData extends React.Component {
             <td>-</td>
           </tr>
         );
-      }
+      } */
+
 
       return (
         <>
@@ -168,8 +185,8 @@ class tableData extends React.Component {
       );
     });
 
-    const headerStyle = { backgroundColor: "rgb(0, 99, 71)", color: "White" };
-    const tableStyle = { marginTop: "0.5%", fontSize: "80%" };
+    const headerStyle = { backgroundColor: "#09294F", color: "White"};
+    const tableStyle = { marginTop: "0.5%", fontSize: "80%", whiteSpace: "nowrap", overflowX: "auto" };
     const auxHeadStyle = { backgroundColor: "#f0f2f5", lineHeight: "100%" };
     const auxStyle = {
       backgroundColor: "#808080",
@@ -178,7 +195,7 @@ class tableData extends React.Component {
 
     return (
       <>
-        <div style={tableStyle} className="table-responsive ">
+        <div style={tableStyle} className="table-responsive">
           <table className="table table-hover table-sm">
             <thead style={headerStyle}>
               <tr style={auxHeadStyle}>
@@ -199,14 +216,14 @@ class tableData extends React.Component {
               </tr>
               <tr>
                 <td>Mes</td>
-                <td>PptoVenta</td>
-                <td>Venta Ejecutada</td>
+                <td>PPTO Venta</td>
+                <td>Ventas Ejecutadas</td>
                 <td>% Cumplimiento</td>
-                <td>Cliente Facturando</td>
+                <td>Ventas Facturando</td>
                 <td>%</td>
-                <td>Cliente Nuevo</td>
+                <td>Ventas Nuevas</td>
                 <td>%</td>
-                <td>Ppto Acumulado</td>
+                <td>PPTO Acumulado</td>
                 <td>Comision Actual</td>
                 <td>Comision Nueva</td>
                 <td>Salario Total</td>
