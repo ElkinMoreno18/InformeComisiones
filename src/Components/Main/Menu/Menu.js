@@ -1,11 +1,10 @@
-import React, { createContext, useState } from "react";
+import React, { useState } from "react";
 import styles from "./styles.css";
 import logoTotal from "../../../infinivirt_logo.png";
 import logoSmall from "../../../nube_infinivirt.png";
 import "antd/dist/antd.css";
-import Ventas from "../Dashboard/Reportes/Ventas/Ventas";
 import { Menu } from "antd";
-import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   HomeOutlined,

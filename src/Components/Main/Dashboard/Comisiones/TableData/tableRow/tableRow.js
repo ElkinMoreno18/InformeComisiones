@@ -1,12 +1,12 @@
 import React from "react";
-import AutosizeInput from "react-input-autosize";
 import axios from "axios";
 import CurrencyFormat from "react-currency-format";
 
 var url_base = "http://localhost:8080";
 var fecha = new Date();
 var firstSale = "";
-var mostrar = '';
+var mostrar = "";
+var mostrarActual = "";
 
 class TableRow extends React.Component {
   constructor(props) {
@@ -25,7 +25,6 @@ class TableRow extends React.Component {
   }
 
   Percentages(value, string, rol) {
-
     var porc = 0;
     if (value < 0.5 && rol === "vendedor") {
       porc = string == "act" ? 0.004 : 0.008;
@@ -68,29 +67,55 @@ class TableRow extends React.Component {
   }
 
   calcularVentaEjecutada(e) {
+    if (e != null) {
+      var spl = e.split(",");
+      if (spl.length > 1) {
+        if (spl[1] !== "" && spl[1].charAt(spl[1].length - 1) !== "0") {
+          var calculateNumber = e.replace(/\./g, "");
+          var doubleNumber = calculateNumber.replace(/\,/g, ".");
+          this.calcuVenEjec(doubleNumber, e);
+
+          /* var number = parseFloat(doubleNumber);
+
+      mostrarActual = event;
+      item.ClienteActual = number;
+
+      item.Porcentaje =
+        item.VentaEjecutada > number ? number / item.VentaEjecutada : 0;
+
+      item.ComisionAct =
+        number * this.Percentages(item.porcCumplimiento, "act", rol);
+
+      this.props.updateItems(item, this.props.itemIndex); */
+        }
+      }
+      if (!e.includes(",")) {
+        var calculateNumber = e.replace(/\./g, "");
+        this.calcuVenEjec(calculateNumber, e);
+      }
+    }
+  }
+
+  calcuVenEjec(calculateNumber, e) {
     const item = this.props.item;
     const itemAnterior = this.props.itemAnterior;
 
-     if (e != null) {
-      var calculateNumber = e.replace(/\./g, "");
-      var doubleNumber = calculateNumber.replace(/\,/g, ".")
-    }
-    var num = parseFloat(doubleNumber);
+    var num = parseFloat(calculateNumber);
 
     mostrar = e;
     item.VentaEjecutada = num;
 
-    if (item.month == 1) {
+    if (item.month === 1) {
       firstSale = item.VentaEjecutada;
-    } 
+    }
 
-     item.porcCumplimiento =
+    item.porcCumplimiento =
       item.PresupuestoAcumulado > num ? num / item.PresupuestoAcumulado : 0;
     item.Porcentaje = num > item.ClienteActual ? item.ClienteActual / num : 0;
 
     item.ClienteNuevo = num * item.PorcentajeNuevo;
 
-    if (itemAnterior == null) {
+    if (itemAnterior === null) {
       item.pptoAcumulado = item.pptoVenta;
     } else {
       item.pptoAcumulado =
@@ -98,21 +123,47 @@ class TableRow extends React.Component {
         itemAnterior.pptoAcumulado -
         itemAnterior.VentaEjecutada;
     }
-    this.props.updateItems(item);
+
+    this.props.updateItems(item, this.props.itemIndex);
   }
 
   calcularClienteFacturando(event) {
+    if (event != null) {
+      var spl = event.split(",");
+      if (spl.length > 1) {
+        if (spl[1] !== "" && spl[1].charAt(spl[1].length - 1) !== "0") {
+          var calculateNumber = event.replace(/\./g, "");
+          var doubleNumber = calculateNumber.replace(/\,/g, ".");
+          this.calcu(doubleNumber, event);
+
+          /* var number = parseFloat(doubleNumber);
+
+      mostrarActual = event;
+      item.ClienteActual = number;
+
+      item.Porcentaje =
+        item.VentaEjecutada > number ? number / item.VentaEjecutada : 0;
+
+      item.ComisionAct =
+        number * this.Percentages(item.porcCumplimiento, "act", rol);
+
+      this.props.updateItems(item, this.props.itemIndex); */
+        }
+      }
+      if (!event.includes(",")) {
+        var calculateNumber = event.replace(/\./g, "");
+        this.calcu(calculateNumber, event);
+      }
+    }
+  }
+
+  calcu(doubleNumber, event) {
     const item = this.props.item;
     const rol = this.props.rol;
 
-    if (event != null) {
-      var calculateNumber = event.replace(/\./g, "");
-      var doubleNumber = calculateNumber.replace(/\,/g, ".")
-    }
-
     var number = parseFloat(doubleNumber);
 
-    var mostrarActual = event;
+    mostrarActual = event;
     item.ClienteActual = number;
 
     item.Porcentaje =
@@ -121,7 +172,7 @@ class TableRow extends React.Component {
     item.ComisionAct =
       number * this.Percentages(item.porcCumplimiento, "act", rol);
 
-   this.props.updateItems(item);
+    this.props.updateItems(item, this.props.itemIndex);
   }
 
   sendData() {
@@ -169,7 +220,6 @@ class TableRow extends React.Component {
         status: true,
       });
     });
-
   }
 
   render() {
@@ -182,8 +232,9 @@ class TableRow extends React.Component {
       inactiveMonth = true;
     } */
 
+    console.log(item.VentaEjecutada);
 
-   // this.mostrar = item.VentaEjecutada;
+    // this.mostrar = item.VentaEjecutada;
     this.mostrarActual = item.ClienteActual;
 
     item.porcCumplimiento =
@@ -202,10 +253,13 @@ class TableRow extends React.Component {
       item.ClienteActual * this.Percentages(item.porcCumplimiento, "act", rol);
 
     item.ClienteNuevo = Math.round(item.VentaEjecutada * item.PorcentajeNuevo);
+   // item.ClienteNuevo = item.VentaEjecutada * item.PorcentajeNuevo;
 
-    item.ComisionNue = Math.round(
+      item.ComisionNue = Math.round(
       item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new", rol)
-    );
+    ); 
+    /*item.ComisionNue =
+      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new", rol); */
 
     item.salarioTotal =
       item.ComisionAct + item.ComisionNue + parseInt(this.props.salarioMensual);
@@ -237,12 +291,15 @@ class TableRow extends React.Component {
     const presuVenta = item.pptoVenta.toLocaleString("es-CO");
 
     const porcentajeCumpli = Math.round(item.porcCumplimiento * 100);
+    //const porcentajeCumpli = item.porcCumplimiento * 100;
 
     const porcentajeActu = Math.round(item.Porcentaje * 100);
+    //const porcentajeActu = item.Porcentaje * 100;
 
     const ventaClienteNuevo = item.ClienteNuevo.toLocaleString("es-CO");
 
     const porcentajeVentaNueva = Math.round(item.PorcentajeNuevo * 100);
+    //const porcentajeVentaNueva = item.PorcentajeNuevo * 100;
 
     const presupuestoAcum = item.PresupuestoAcumulado.toLocaleString("es-CO");
 
@@ -335,7 +392,7 @@ class TableRow extends React.Component {
                 this.calcularClienteFacturando(evt.target.value)
               }
               disabled={inactiveMonth}
-              value={item.ClienteActual == 0 ? "" : this.mostrarActual}
+              value={item.ClienteActual == 0 ? "" : item.ClienteActual}
               id={`ClienteActual${item.month}`}
               onBlur={() => this.sendData(item)}
               min="0"

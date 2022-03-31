@@ -61,10 +61,10 @@ class tableData extends React.Component {
     const items = this.state.items;
     console.log(items)    
     items[index] = item;
-    console.log(items[index])
-    this.setState({
+    console.log(items)
+     this.setState({
       items: items,
-    });
+    }); 
   }
 
   SetFirstSale(firstSale) {
@@ -116,7 +116,7 @@ class tableData extends React.Component {
     }
 
     if (
-      this.state.method == "consult" && this.state.items.length == 0 && data.length > 0) {
+      this.state.method === "consult" && this.state.items.length === 0 && data.length > 0) {
      // this.state.items.push(this.crearFila(1, "-"));
       data.forEach((element) => {
         this.state.items.push(this.consultFila(element));
@@ -125,7 +125,6 @@ class tableData extends React.Component {
 
 
     let itemAnterior = null;
-console.log(this.state)    
 
     const body = this.state.items.map((item, index) => {
       if (index > 1) {
@@ -175,6 +174,7 @@ console.log(this.state)
             item={item}
             itemAnterior={itemAnterior}
             key={index}
+            itemIndex={index}
             salarioMensual={monthSalary}
             updateItems={this.updateItems}
             representative={representative}
