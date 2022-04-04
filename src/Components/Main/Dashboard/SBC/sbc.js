@@ -1,10 +1,11 @@
-import React from "react";
-import GaugeChart from 'react-gauge-chart'
-import axios from 'axios'
+import React, { Component } from "react";
+import LiquidFillGauge from "react-liquid-gauge";
+import { CircularGauge } from "@progress/kendo-react-gauges";
+import axios from "axios";
 
+var url_base = "http://localhost:8080/";
 
 export default class SBC extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -12,39 +13,44 @@ export default class SBC extends React.Component {
     };
   }
 
-
   consultData() {
-    const headers = {
-      'Authorization': 'djsadjsa'
-    }
-    var request = "http://10.10.104.44/actions/authToken";
-    axios.post(request,"",{headers: headers}).then((res) => {
+    var request = "api/sbc/kpi/claroDPBX/";
+    axios.get(url_base + request).then((res) => {
       this.setState({
         datos: res.data,
       });
     });
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    this.consultData();
+  }
+
+  componentDidUpdate() {
     this.consultData();
   }
 
   render() {
     var data = this.state.datos;
-    data.forEach((element) => {
-      console.log(element)
-    });
-    return( <>
-    <p></p>
-    <div style={{width:"10%"}}>
-<GaugeChart id="gauge-chart5"
-  nrOfLevels={420}
-  arcsLength={[0.3, 0.5, 0.2]}
-  colors={['#5BE12C', '#F5CD19', '#EA4228']}
-  percent={0.37}
-  arcPadding={0.02}
-/>
-</div></>
-)
+
+    return (
+      <>
+        <div>
+          <h4>Active Calls</h4>
+          <div>
+            <LiquidFillGauge
+            style={{ margin: '0 1%' }}
+              value={(data.value * 100) / 250}
+              percent="%"
+              width={100}
+              height={100}
+              riseAnimation={false}
+              waveAnimation={false}
+            ></LiquidFillGauge>
+            <h5 style={{marginLeft: "4%", marginTop: "-4%", color: "white"}}>{data.value}</h5>
+          </div>
+        </div>
+      </>
+    );
   }
 }

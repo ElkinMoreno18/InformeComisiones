@@ -34,14 +34,14 @@ class Comisiones extends React.Component {
   cambioPresupuesto(presupuesto) {
     this.setState({
       presupuesto: presupuesto,
-      presupuestoMensual: Math.round(presupuesto / 10),
+      presupuestoMensual: presupuesto / 10,
     });
   }
 
   submitForm = (event) => {
     var Presupuesto = this.state.presupuesto;
     var Meses = this.state.meses;
-    this.state.presupuestoMensual = Math.round(Presupuesto / Meses);
+    this.state.presupuestoMensual = Presupuesto / Meses;
     event.preventDefault();
     this.setState({
       mostrarTabla: true,
@@ -219,10 +219,10 @@ class Comisiones extends React.Component {
                   name="pptoMonth"
                   thousandSeparator="."
                   decimalSeparator=","
-                  value={Math.round(this.state.presupuesto / this.state.meses)}
-                  onChange={(ev) => {
-                    this.cambioPresupuestoMensual(ev.target.value);
-                  }}
+                  value={this.state.presupuesto / this.state.meses}
+                  // onChange={(ev) => {
+                  //   this.cambioPresupuestoMensual(ev.target.value);
+                  // }}
                   disabled
                 />
               </div>

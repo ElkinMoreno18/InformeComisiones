@@ -9,20 +9,6 @@ var mostrar = "";
 var mostrarActual = "";
 
 class TableRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      item: props.item,
-      itemAnterior: props.itemAnterior,
-      salarioMensual: props.salarioMensual,
-      representative: props.representative,
-      pptoAnual: props.pptoAnual,
-      pptoMensual: props.pptoMensual,
-      data: props.data,
-      rol: props.rol,
-      firstSale: props.firstSale,
-    };
-  }
 
   Percentages(value, string, rol) {
     var porc = 0;
@@ -95,6 +81,7 @@ class TableRow extends React.Component {
       }
     }
   }
+
 
   calcuVenEjec(calculateNumber, e) {
     const item = this.props.item;
@@ -232,34 +219,34 @@ class TableRow extends React.Component {
       inactiveMonth = true;
     } */
 
-    console.log(item.VentaEjecutada);
 
     // this.mostrar = item.VentaEjecutada;
     this.mostrarActual = item.ClienteActual;
 
-    item.porcCumplimiento =
-      item.PresupuestoAcumulado > item.VentaEjecutada
+    item.porcCumplimiento = item.VentaEjecutada / item.PresupuestoAcumulado
+      /* item.PresupuestoAcumulado < item.VentaEjecutada
         ? item.VentaEjecutada / item.PresupuestoAcumulado
-        : 0;
+        : 0; */
 
-    item.Porcentaje =
-      item.VentaEjecutada > item.ClienteActual
+    item.Porcentaje = item.ClienteActual / item.VentaEjecutada
+
+      /* item.VentaEjecutada > item.ClienteActual
         ? item.ClienteActual / item.VentaEjecutada
-        : 0;
+        : 0; */
 
     item.PorcentajeNuevo = 1 - item.Porcentaje;
 
     item.ComisionAct =
       item.ClienteActual * this.Percentages(item.porcCumplimiento, "act", rol);
 
-    item.ClienteNuevo = Math.round(item.VentaEjecutada * item.PorcentajeNuevo);
-   // item.ClienteNuevo = item.VentaEjecutada * item.PorcentajeNuevo;
+   // item.ClienteNuevo = Math.round(item.VentaEjecutada * item.PorcentajeNuevo);
+    item.ClienteNuevo = item.VentaEjecutada * item.PorcentajeNuevo;
 
-      item.ComisionNue = Math.round(
+      /* item.ComisionNue = Math.round(
       item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new", rol)
-    ); 
-    /*item.ComisionNue =
-      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new", rol); */
+    );  */
+    item.ComisionNue =
+      item.ClienteNuevo * this.Percentages(item.porcCumplimiento, "new", rol);
 
     item.salarioTotal =
       item.ComisionAct + item.ComisionNue + parseInt(this.props.salarioMensual);
@@ -272,7 +259,7 @@ class TableRow extends React.Component {
                ? item.VentaEjecutada
                : itemAnterior.ClienteNuevo;
       */
-      if (item.month == 3) {
+      if (item.month == 3 && rol === 'coordinador') {
         item.PresupuestoAcumulado =
           item.pptoVenta +
           itemAnterior.PresupuestoAcumulado -
@@ -283,6 +270,7 @@ class TableRow extends React.Component {
           item.pptoVenta +
           itemAnterior.PresupuestoAcumulado -
           itemAnterior.VentaEjecutada;
+
       }
     }
 
@@ -339,8 +327,8 @@ class TableRow extends React.Component {
                 id={`VentaEjecutada${item.month}`}
                 min="0"
                 disabled={inactiveMonth}
-                style={{ border: "none", width: "120%" }}
-              />
+                inputStyle={{ border: "none", width: "120%" }}
+                />
             </td>
             {/* Venta Ejecutada */}
             <td> - %</td>
@@ -376,7 +364,7 @@ class TableRow extends React.Component {
               id={`VentaEjecutada${item.month}`}
               min="0"
               disabled={inactiveMonth}
-              style={{ border: "none", width: "120%" }}
+              inputStyle={{ border: "none", width: "120%" }}
             />
           </td>
           {/* Venta Ejecutada */}

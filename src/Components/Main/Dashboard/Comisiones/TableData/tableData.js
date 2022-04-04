@@ -111,6 +111,8 @@ class tableData extends React.Component {
     var data = this.state.datos;
     var inactiveMonth = false;
 
+
+
     if (representative === "general") {
       rol = "general";
     }
@@ -217,17 +219,17 @@ class tableData extends React.Component {
               </tr>
               <tr>
                 <td>Mes</td>
-                <td>PPTO Venta</td>
-                <td>Ventas Ejecutadas</td>
+                <td>PPTO Ventas</td>
+                <td>ㅤㅤㅤVENTASㅤㅤㅤ</td>
                 <td>% Cumplimiento</td>
-                <td>Ventas Facturando</td>
+                <td>Fact. Acumulada</td>
                 <td>%</td>
-                <td>Ventas Nuevas</td>
+                <td>Fact. Crecimiento</td>
                 <td>%</td>
                 <td>PPTO Acumulado</td>
-                <td>Comision Actual</td>
-                <td>Comision Nueva</td>
-                <td>Salario Total</td>
+                <td>Comisión <br/> Acumulada</td>
+                <td>Comisión <br/> Crecimiento</td>
+                <td>Básico + <br/> Comisión</td>
               </tr>
             </thead>
             <tbody>{body}</tbody>
