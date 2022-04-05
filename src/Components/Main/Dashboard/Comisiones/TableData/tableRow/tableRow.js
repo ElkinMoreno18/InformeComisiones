@@ -215,9 +215,9 @@ class TableRow extends React.Component {
     const rol = this.props.rol;
     var inactiveMonth = false;
 
-    /* if (item.month < fecha.getMonth()+1) {
+     if (item.month < fecha.getMonth()+1) {
       inactiveMonth = true;
-    } */
+    } 
 
 
     // this.mostrar = item.VentaEjecutada;

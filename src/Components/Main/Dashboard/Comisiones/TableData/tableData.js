@@ -1,11 +1,8 @@
 import React from "react";
 import TableRow from "./tableRow/tableRow";
-import { Button } from "antd";
-import CurrencyFormat from "react-currency-format";
 import axios from "axios";
 
 var url_base = "http://localhost:8080";
-var fecha = new Date();
 
 class tableData extends React.Component {
   constructor(props) {
@@ -109,8 +106,6 @@ class tableData extends React.Component {
     var pptoAnual = this.props.data.presupuesto;
     var rol = this.props.data.rol;
     var data = this.state.datos;
-    var inactiveMonth = false;
-
 
 
     if (representative === "general") {

@@ -6,14 +6,16 @@ import "antd/dist/antd.css";
 import { Layout } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 
-
 const { Header, Sider, Content, Footer } = Layout;
 
 class Main extends React.Component {
-  state = {
-    collapsed: false,
-    mensaje: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      collapsed: false,
+      mensaje: "",
+    };
+  }
 
   toggle = () => {
     this.setState({
@@ -21,27 +23,34 @@ class Main extends React.Component {
     });
   };
 
-
   render() {
-    const footerStyle = { height: "5%", lineHeight: "50%"};
+    const footerStyle = { height: "5%", lineHeight: "50%" };
+    const infoLogin = this.props.infoLogin;
 
     return (
       <div>
         <Layout>
-          <Sider width={"18%"} trigger={null} collapsible collapsed={this.state.collapsed}>
-            <MenuPage collapsed={this.state.collapsed}>
-            </MenuPage>
+          <Sider
+            width={"18%"}
+            trigger={null}
+            collapsible
+            collapsed={this.state.collapsed}
+          >
+            <MenuPage collapsed={this.state.collapsed}></MenuPage>
           </Sider>
           <Layout className="site-layout">
-            <Header className="site-layout-background" style={{ backgroundColor: "white", height: "7%" }}>
+            <Header
+              className="site-layout-background"
+              style={{ backgroundColor: "white", height: "7%" }}
+            >
               {React.createElement(
                 this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
                 {
                   className: "trigger",
                   onClick: this.toggle,
-                  style:{
-                    marginTop: "0%"
-                  }
+                  style: {
+                    marginTop: "0%",
+                  },
                 }
               )}
             </Header>
@@ -54,7 +63,7 @@ class Main extends React.Component {
                 minHeight: "100vh",
               }}
             >
-              <Dashboard />
+              <Dashboard infoLogin={infoLogin}/>
             </Content>
             <Footer style={footerStyle} className="text-center">
               <FooterPage></FooterPage>

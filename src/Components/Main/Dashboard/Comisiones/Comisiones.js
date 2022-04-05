@@ -21,7 +21,6 @@ class Comisiones extends React.Component {
       activarButton: false,
       rol: "",
     };
-
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -48,8 +47,10 @@ class Comisiones extends React.Component {
     });
   };
 
-  componentDidMount(){
-    alert("Los porcentajes actualizados diariamente en esta plataforma son de seguimiento y meramente informativos, por lo cual no constituyen datos únicos y/o concluyentes para la realización de los pagos de comisiones, ya que estos están sujetos a las políticas de facturación, comisión y nómina de Infinivirt Technologies S.A.S.")
+  componentDidMount() {
+    alert(
+      "Los porcentajes actualizados diariamente en esta plataforma son de seguimiento y meramente informativos, por lo cual no constituyen datos únicos y/o concluyentes para la realización de los pagos de comisiones, ya que estos están sujetos a las políticas de facturación, comisión y nómina de Infinivirt Technologies S.A.S."
+    );
   }
 
   handleChange(event) {
@@ -72,6 +73,14 @@ class Comisiones extends React.Component {
   }
 
   render() {
+    const infoLogin = this.props.infoLogin;
+    console.log(infoLogin);
+    var hidden = false;
+
+    if (infoLogin.username != "elkin.moreno" && infoLogin.username != "andres.mesa" && infoLogin.username != "sergio.munoz" && infoLogin.username != "sandra.ramos" && infoLogin.username != "daniela.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango") {
+      hidden = true;
+    }
+
     const styleContainer = {
       textAlign: "center",
     };
@@ -132,15 +141,67 @@ class Comisiones extends React.Component {
                   <option selected hidden>
                     Seleccione
                   </option>
-                  <option value="general">General</option>
+                  {console.log(infoLogin.username)}
+                  {console.log(hidden)}
+                  <option hidden={
+                         infoLogin.username != "maria.zapata" && infoLogin.username != "jorge.arango"  && hidden == true
+                          ? true
+                          : false
+                      } value="general">General</option>
                   <optgroup label="Vendedores">
-                    <option value="Leidy">Leidy tangarife</option>
-                    <option value="Andres">Andres Mesa</option>
-                    <option value="Sergio">Sergio Muñoz</option>
-                    <option value="Sandra">Sandra Ramos</option>
+                    <option
+                      hidden={
+                         infoLogin.username != "leidy.tangarife" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
+                          ? true
+                          : false
+                      }
+                      value="Leidy"
+                    >
+                      Leidy tangarife
+                    </option>
+                    <option
+                      hidden={
+                        infoLogin.username != "andres.mesa" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
+                          ? true
+                          : false
+                      }
+                      value="Andres"
+                    >
+                      Andres Mesa
+                    </option>
+                    <option
+                      hidden={
+                        infoLogin.username != "sergio.munoz" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
+                          ? true
+                          : false
+                      }
+                      value="Sergio"
+                    >
+                      Sergio Muñoz
+                    </option>
+                    <option
+                      hidden={
+                        infoLogin.username != "sandra.ramos" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
+                          ? true
+                          : false
+                      }
+                      value="Sandra"
+                    >
+                      Sandra Ramos
+                    </option>
                   </optgroup>
                   <optgroup label="Coordinadores">
-                    <option value="Daniela">Daniela Zapata</option>
+                    <option
+                      hidden={
+                        infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" &&
+                        hidden == true
+                          ? true
+                          : false
+                      }
+                      value="Daniela"
+                    >
+                      Daniela Zapata
+                    </option>
                   </optgroup>
                 </select>
               </div>

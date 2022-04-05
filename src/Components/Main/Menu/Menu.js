@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styles from "./styles.css";
 import logoTotal from "../../../infinivirt_logo.png";
 import logoSmall from "../../../nube_infinivirt.png";
 import "antd/dist/antd.css";
@@ -31,6 +30,7 @@ const MenuPage = (props) => {
   return (
     <>
       <img
+      alt="Logo Infinivirt"
         src={collapsed ? logoSmall : logoTotal}
         style={collapsed ? {} : {width: '70%', marginInline: '15%', height: '5%' }}
         className="logo bg-transparent"

@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
 import LiquidFillGauge from "react-liquid-gauge";
-import { CircularGauge } from "@progress/kendo-react-gauges";
 import axios from "axios";
 
 var url_base = "http://localhost:8080/";

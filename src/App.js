@@ -43,8 +43,6 @@ class App extends Component {
       password: password,
     };
     ev.preventDefault();
-
-    console.log(info);
     axios.post(request, info).then((res) => {
       this.setState({
         status: true,
@@ -56,7 +54,7 @@ class App extends Component {
   render() {
     var data = this.state.datos;
     if (data.login == true) {
-      return <Main></Main>;
+      return <Main infoLogin={this.state}></Main>;
     } else {
       return (
         <>

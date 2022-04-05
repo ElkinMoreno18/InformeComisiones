@@ -1,10 +1,8 @@
 import React from "react";
 import "./Login.css";
 import Logo from "../../Infinivirt_gris.png";
-import axios from "axios";
 
 
-var url_base = "http://localhost:8080";
 
 class Login extends React.Component {
   render() {
@@ -13,6 +11,7 @@ class Login extends React.Component {
         <div className="registration-form">
           <form>
             <img
+            alt="Logo Infinivirt"
               style={{ width: "80%", marginLeft: "10%", marginTop: "0" }}
               src={Logo}
             ></img>
