@@ -26,6 +26,7 @@
     "echarts-for-react": "^3.0.2",
     "formik": "^2.2.9",
     "gauge-chart-js": "^2.0.1",
+    "javascript-obfuscator": "^4.0.0",
     "jquery": "^3.6.0",
     "material-icons": "^1.10.7",
     "material-table": "^1.63.0",

@@ -319,7 +319,7 @@ class TableRow extends React.Component {
                 type="text"
                 thousandSeparator="."
                 decimalSeparator=","
-                decimalScale={3}
+                decimalScale={0}
                 className="form-control form-control-sm CurrencyInput"
                 onChange={(e) => this.calcularVentaEjecutada(e.target.value)}
                 value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
@@ -356,7 +356,7 @@ class TableRow extends React.Component {
               type="text"
               thousandSeparator="."
               decimalSeparator=","
-              decimalScale={3}
+              decimalScale={0}
               className="form-control form-control-sm CurrencyInput"
               onChange={(e) => this.calcularVentaEjecutada(e.target.value)}
               value={item.VentaEjecutada == 0 ? "" : item.VentaEjecutada}
@@ -376,6 +376,7 @@ class TableRow extends React.Component {
               type="text"
               thousandSeparator="."
               decimalSeparator=","
+              decimalScale={0}
               onChange={(evt) =>
                 this.calcularClienteFacturando(evt.target.value)
               }

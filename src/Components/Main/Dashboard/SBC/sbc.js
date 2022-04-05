@@ -38,7 +38,7 @@ export default class SBC extends React.Component {
           <h4>Active Calls</h4>
           <div>
             <LiquidFillGauge
-            style={{ margin: '0 1%' }}
+              style={{ margin: "0 1%" }}
               value={(data.value * 100) / 250}
               percent="%"
               width={100}
@@ -46,7 +46,9 @@ export default class SBC extends React.Component {
               riseAnimation={false}
               waveAnimation={false}
             ></LiquidFillGauge>
-            <h5 style={{marginLeft: "4%", marginTop: "-4%", color: "white"}}>{data.value}</h5>
+            <h5 style={{ marginLeft: "4%", marginTop: "-4%", color: "white" }}>
+              {data.value}
+            </h5>
           </div>
         </div>
       </>

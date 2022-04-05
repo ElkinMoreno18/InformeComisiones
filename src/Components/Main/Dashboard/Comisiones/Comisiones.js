@@ -77,7 +77,7 @@ class Comisiones extends React.Component {
     console.log(infoLogin);
     var hidden = false;
 
-    if (infoLogin.username != "elkin.moreno" && infoLogin.username != "andres.mesa" && infoLogin.username != "sergio.munoz" && infoLogin.username != "sandra.ramos" && infoLogin.username != "daniela.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango") {
+    if (infoLogin.username != "leidy.tangarife" && infoLogin.username != "andres.mesa" && infoLogin.username != "sergio.munoz" && infoLogin.username != "sandra.ramos" && infoLogin.username != "daniela.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && infoLogin.username != "elkin.moreno") {
       hidden = true;
     }
 
@@ -144,7 +144,7 @@ class Comisiones extends React.Component {
                   {console.log(infoLogin.username)}
                   {console.log(hidden)}
                   <option hidden={
-                         infoLogin.username != "maria.zapata" && infoLogin.username != "jorge.arango"  && hidden == true
+                         infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango"  && hidden == true
                           ? true
                           : false
                       } value="general">General</option>

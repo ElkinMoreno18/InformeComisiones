@@ -22,7 +22,7 @@ class Login extends React.Component {
                 </span>
               </div>
               <input
-                type="email"
+                type="text"
                 className="form-control item"
                 placeholder="Email"
                 value={this.state.username}

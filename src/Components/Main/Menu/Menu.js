@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import logoTotal from "../../../infinivirt_logo.png";
 import logoSmall from "../../../nube_infinivirt.png";
+import styles from "../Menu/styles.css"
 import "antd/dist/antd.css";
 import { Menu } from "antd";
 import { Link } from 'react-router-dom';
@@ -23,14 +24,20 @@ const { SubMenu } = Menu;
 
 
 const MenuPage = (props) => {
+  var hidden = false;
   var collapsed = props.collapsed;
   const [selectedMenuItem, setSelectedMenuItem] = useState('item1');
+  var infoLogin = props.infoLogin
+  console.log(infoLogin)
+  if (infoLogin.username != "leidy.tangarife" && infoLogin.username != "andres.mesa" && infoLogin.username != "sergio.munoz" && infoLogin.username != "sandra.ramos" && infoLogin.username != "daniela.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && infoLogin.username != "elkin.moreno") {
+    hidden = true;
+  }
 
 
   return (
     <>
       <img
-      alt="Logo Infinivirt"
+        alt="Logo Infinivirt"
         src={collapsed ? logoSmall : logoTotal}
         style={collapsed ? {} : {width: '70%', marginInline: '15%', height: '5%' }}
         className="logo bg-transparent"
@@ -63,7 +70,7 @@ const MenuPage = (props) => {
         <Menu.Item key="9" icon={<HddOutlined />}>
         <Link to='/Activos'/>Inventario de Activos
         </Menu.Item>
-        <Menu.Item key="10" icon={<DollarOutlined />}>
+        <Menu.Item key="10" hidden={hidden} icon={<DollarOutlined />}>
         <Link to='/Comisiones' />Reporte de Comisiones
         </Menu.Item>
         <Menu.Item key="11" icon={<CalculatorOutlined />}>

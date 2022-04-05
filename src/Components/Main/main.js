@@ -36,7 +36,7 @@ class Main extends React.Component {
             collapsible
             collapsed={this.state.collapsed}
           >
-            <MenuPage collapsed={this.state.collapsed}></MenuPage>
+            <MenuPage collapsed={this.state.collapsed} infoLogin={infoLogin}></MenuPage>
           </Sider>
           <Layout className="site-layout">
             <Header
