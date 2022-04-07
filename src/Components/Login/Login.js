@@ -2,8 +2,6 @@ import React from "react";
 import "./Login.css";
 import Logo from "../../Infinivirt_gris.png";
 
-
-
 class Login extends React.Component {
   render() {
     return (

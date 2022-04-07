@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import logoTotal from "../../../infinivirt_logo.png";
 import logoSmall from "../../../nube_infinivirt.png";
-import styles from "../Menu/styles.css"
+import styles from "../Menu/styles.css";
 import "antd/dist/antd.css";
 import { Menu } from "antd";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import {
   HomeOutlined,
@@ -17,67 +17,107 @@ import {
   HistoryOutlined,
   HddOutlined,
   DollarOutlined,
-  CalculatorOutlined
+  CalculatorOutlined,
 } from "@ant-design/icons";
 
 const { SubMenu } = Menu;
 
-
 const MenuPage = (props) => {
-  var hidden = false;
   var collapsed = props.collapsed;
-  const [selectedMenuItem, setSelectedMenuItem] = useState('item1');
-  var infoLogin = props.infoLogin
-  console.log(infoLogin)
-  if (infoLogin.username != "leidy.tangarife" && infoLogin.username != "andres.mesa" && infoLogin.username != "sergio.munoz" && infoLogin.username != "sandra.ramos" && infoLogin.username != "daniela.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && infoLogin.username != "elkin.moreno") {
-    hidden = true;
-  }
+  const [selectedMenuItem, setSelectedMenuItem] = useState("item1");
+  var infoLogin = props.infoLogin;
+  console.log(infoLogin);
 
+  var showComitions = false;
+
+  if (
+    infoLogin.username == "leidy.tangarife" ||
+    infoLogin.username == "andres.mesa" ||
+    infoLogin.username == "sergio.munoz" ||
+    infoLogin.username == "sandra.ramos" ||
+    infoLogin.username == "maria.zapata" ||
+    infoLogin.username == "ingry.marquez" ||
+    infoLogin.username == "jorge.arango" ||
+    infoLogin.username == "elkin.moreno"
+  ) {
+    showComitions = true;
+  } else {
+    showComitions = false;
+  }
 
   return (
     <>
       <img
         alt="Logo Infinivirt"
         src={collapsed ? logoSmall : logoTotal}
-        style={collapsed ? {} : {width: '70%', marginInline: '15%', height: '5%' }}
+        style={
+          collapsed ? {} : { width: "70%", marginInline: "15%", height: "5%" }
+        }
         className="logo bg-transparent"
         id="logo"
       />
-      <Menu selectedKeys={selectedMenuItem} onClick={(e) => setSelectedMenuItem(e.key)} theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-        <Menu.Item key="1" icon={<HomeOutlined />}>
-          <Link to='/Home'/> Dashboard
+      <Menu
+        selectedKeys={selectedMenuItem}
+        onClick={(e) => setSelectedMenuItem(e.key)}
+        theme="dark"
+        mode="inline"
+        defaultSelectedKeys={["1"]}
+      >
+        <Menu.Item hidden={showComitions} key="1" icon={<HomeOutlined />}>
+          <Link to="/Home" /> Dashboard
         </Menu.Item>
-        <SubMenu key="sub1" icon={<ReconciliationOutlined />} title="Reportes">
+        <SubMenu
+          key="sub1"
+          icon={<ReconciliationOutlined />}
+          title="Reportes"
+        >
           <Menu.Item key="3" icon={<AreaChartOutlined />}>
-          <Link to='/Ventas'/>Informe de Ventas
+            <Link to="/Ventas" />
+            Informe de Ventas
           </Menu.Item>
           <Menu.Item key="4" icon={<SolutionOutlined />}>
-          <Link to='/Margenes'/>Informe de Margenes
+            <Link to="/Margenes" />
+            Informe de Margenes
           </Menu.Item>
           <Menu.Item key="5" icon={<PhoneOutlined />}>
-          <Link to='/Vendors'/>Informe de Vendors
+            <Link to="/Vendors" />
+            Informe de Vendors
           </Menu.Item>
         </SubMenu>
-        <Menu.Item key="6" icon={<DownloadOutlined />}>
-        <Link to='/CDRs'/>Descarga de CDRs
+        <Menu.Item hidden={showComitions} key="6" icon={<DownloadOutlined />}>
+          <Link to="/CDRs" />
+          Descarga de CDRs
         </Menu.Item>
-        <Menu.Item key="7" icon={<DashboardOutlined />}>
-        <Link to='/CallMonitor'/>Call Monitor
+        <Menu.Item hidden={showComitions} key="7" icon={<DashboardOutlined />}>
+          <Link to="/CallMonitor" />
+          Call Monitor
         </Menu.Item>
-        <Menu.Item key="8" icon={<HistoryOutlined />}>
-        <Link to='/DIDs'/> Historial de DIDs
+        <Menu.Item hidden={showComitions} key="8" icon={<HistoryOutlined />}>
+          <Link to="/DIDs" /> Historial de DIDs
         </Menu.Item>
-        <Menu.Item key="9" icon={<HddOutlined />}>
-        <Link to='/Activos'/>Inventario de Activos
+        <Menu.Item hidden={showComitions} key="9" icon={<HddOutlined />}>
+          <Link to="/Activos" />
+          Inventario de Activos
         </Menu.Item>
-        <Menu.Item key="10" hidden={hidden} icon={<DollarOutlined />}>
-        <Link to='/Comisiones' />Reporte de Comisiones
+        <Menu.Item hidden={!showComitions} key="10" icon={<DollarOutlined />}>
+          <Link to="/Comisiones" />
+          Reporte de Comisiones
         </Menu.Item>
-        <Menu.Item key="11" icon={<CalculatorOutlined />}>
-        <Link to='/RTL' />Calculo de RTL
+        <Menu.Item
+          hidden={showComitions}
+          key="11"
+          icon={<CalculatorOutlined />}
+        >
+          <Link to="/RTL" />
+          Calculo de RTL
         </Menu.Item>
-        <Menu.Item key="12" icon={<CalculatorOutlined />}>
-        <Link to='/SBC' />KPI SBCs
+        <Menu.Item
+          hidden={showComitions}
+          key="12"
+          icon={<CalculatorOutlined />}
+        >
+          <Link to="/SBC" />
+          KPI SBCs
         </Menu.Item>
       </Menu>
     </>

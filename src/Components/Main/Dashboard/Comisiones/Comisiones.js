@@ -75,11 +75,24 @@ class Comisiones extends React.Component {
   render() {
     const infoLogin = this.props.infoLogin;
     console.log(infoLogin);
-    var hidden = false;
+    var hidden = true;
 
-    if (infoLogin.username != "leidy.tangarife" && infoLogin.username != "andres.mesa" && infoLogin.username != "sergio.munoz" && infoLogin.username != "sandra.ramos" && infoLogin.username != "daniela.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && infoLogin.username != "elkin.moreno") {
+    if (
+      infoLogin.username == "leidy.tangarife" ||
+      infoLogin.username == "andres.mesa" ||
+      infoLogin.username == "sergio.munoz" ||
+      infoLogin.username == "sandra.ramos" ||
+      infoLogin.username == "maria.zapata" ||
+      infoLogin.username == "ingry.marquez" ||
+      infoLogin.username == "jorge.arango" ||
+      infoLogin.username == "elkin.moreno"
+    ) {
+      hidden = false;
+    } else {
       hidden = true;
     }
+
+    console.log(hidden);
 
     const styleContainer = {
       textAlign: "center",
@@ -141,29 +154,43 @@ class Comisiones extends React.Component {
                   <option selected hidden>
                     Seleccione
                   </option>
-                  {console.log(infoLogin.username)}
-                  {console.log(hidden)}
-                  <option hidden={
-                         infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango"  && hidden == true
-                          ? true
-                          : false
-                      } value="general">General</option>
+                  <option
+                    hidden={
+                      infoLogin.username == "ingry.marquez" ||
+                      infoLogin.username == "jorge.arango" ||
+                      infoLogin.username == "elkin.moreno"
+                        ? false
+                        : true
+                    }
+                    value="general"
+                  >
+                    General
+                  </option>
                   <optgroup label="Vendedores">
                     <option
                       hidden={
-                         infoLogin.username != "leidy.tangarife" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
-                          ? true
-                          : false
+                        (infoLogin.username == "leidy.tangarife" ||
+                          infoLogin.username == "maria.zapata" ||
+                          infoLogin.username == "ingry.marquez" ||
+                          infoLogin.username == "jorge.arango") &&
+                        hidden == false
+                          ? false
+                          : true
                       }
                       value="Leidy"
                     >
+                      {console.log(infoLogin.username)}
                       Leidy tangarife
                     </option>
                     <option
                       hidden={
-                        infoLogin.username != "andres.mesa" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
-                          ? true
-                          : false
+                        (infoLogin.username == "andres.mesa" ||
+                          infoLogin.username == "maria.zapata" ||
+                          infoLogin.username == "ingry.marquez" ||
+                          infoLogin.username == "jorge.arango") &&
+                        hidden == false
+                          ? false
+                          : true
                       }
                       value="Andres"
                     >
@@ -171,9 +198,13 @@ class Comisiones extends React.Component {
                     </option>
                     <option
                       hidden={
-                        infoLogin.username != "sergio.munoz" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
-                          ? true
-                          : false
+                        (infoLogin.username == "sergio.munoz" ||
+                          infoLogin.username == "maria.zapata" ||
+                          infoLogin.username == "ingry.marquez" ||
+                          infoLogin.username == "jorge.arango") &&
+                        hidden == false
+                          ? false
+                          : true
                       }
                       value="Sergio"
                     >
@@ -181,22 +212,40 @@ class Comisiones extends React.Component {
                     </option>
                     <option
                       hidden={
-                        infoLogin.username != "sandra.ramos" && infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" && hidden == true
-                          ? true
-                          : false
+                        (infoLogin.username == "sandra.ramos" ||
+                          infoLogin.username == "maria.zapata" ||
+                          infoLogin.username == "ingry.marquez" ||
+                          infoLogin.username == "jorge.arango") &&
+                        hidden == false
+                          ? false
+                          : true
                       }
                       value="Sandra"
                     >
                       Sandra Ramos
                     </option>
                   </optgroup>
-                  <optgroup label="Coordinadores">
+                  <optgroup
+                    hidden={
+                      infoLogin.username == "ingry.marquez" ||
+                      infoLogin.username == "jorge.arango" ||
+                      (infoLogin.username == "maria.zapata" && hidden == false)
+                        ? false
+                        : true
+                    }
+                    label="Coordinadores"
+                  >
+                    {console.log(infoLogin.username)}
+                    {console.log(hidden)}
+
                     <option
                       hidden={
-                        infoLogin.username != "maria.zapata" && infoLogin.username != "ingry.marquez" && infoLogin.username != "jorge.arango" &&
-                        hidden == true
-                          ? true
-                          : false
+                        (infoLogin.username == "maria.zapata" ||
+                          infoLogin.username == "ingry.marquez" ||
+                          infoLogin.username == "jorge.arango") &&
+                        hidden == false
+                          ? false
+                          : true
                       }
                       value="Daniela"
                     >
