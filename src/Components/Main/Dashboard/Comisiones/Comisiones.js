@@ -3,6 +3,8 @@ import Table from "./TableData/tableData";
 import axios from "axios";
 import CurrencyFormat from "react-currency-format";
 import "material-icons/iconfont/material-icons.css";
+import { Modal, Button } from "antd";
+import './Comisiones.css'
 
 var url_base = "http://localhost:8080";
 
@@ -20,6 +22,7 @@ class Comisiones extends React.Component {
       activarCampos: false,
       activarButton: false,
       rol: "",
+      modalVisible: true,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -48,9 +51,12 @@ class Comisiones extends React.Component {
   };
 
   componentDidMount() {
-    alert(
+    this.setState({
+      modalVisible: true,
+    });
+    /*  alert(
       "Los porcentajes actualizados diariamente en esta plataforma son de seguimiento y meramente informativos, por lo cual no constituyen datos únicos y/o concluyentes para la realización de los pagos de comisiones, ya que estos están sujetos a las políticas de facturación, comisión y nómina de Infinivirt Technologies S.A.S."
-    );
+    ); */
   }
 
   handleChange(event) {
@@ -73,9 +79,16 @@ class Comisiones extends React.Component {
   }
 
   render() {
+
     const infoLogin = this.props.infoLogin;
     console.log(infoLogin);
     var hidden = true;
+
+    const handleOk = () => {
+      this.setState({
+        modalVisible: false,
+      });
+    };
 
     if (
       infoLogin.username == "leidy.tangarife" ||
@@ -94,13 +107,6 @@ class Comisiones extends React.Component {
 
     console.log(hidden);
 
-    const styleContainer = {
-      textAlign: "center",
-    };
-
-    const styleTwoLastColumns = {
-      marginTop: "3%",
-    };
 
     var data = this.state.datos;
 
@@ -116,14 +122,32 @@ class Comisiones extends React.Component {
     } else {
       this.state.activarButton = false;
     }
-
+    console.log(this.state.modalVisible);
     return (
       <>
-        <div className="contenedor" style={styleContainer}>
+      <div hidden={hidden}>
+        <Modal
+          centered="true"
+          title="Mensaje Importante"
+          okText="Aceptar"
+          closable={false}
+          visible={this.state.modalVisible}
+          onOk={handleOk}
+          cancelButtonProps={{ hidden: true }}
+        >
+          <p>
+            Los porcentajes actualizados diariamente en esta plataforma son de
+            seguimiento y meramente informativos, por lo cual no constituyen
+            datos únicos y/o concluyentes para la realización de los pagos de
+            comisiones, ya que estos están sujetos a las políticas de
+            facturación, comisión y nómina de Infinivirt Technologies S.A.S.
+          </p>
+        </Modal>
+
+        <div className="contenedor">
           <h3>Informe de Comisiones</h3>
-          <form>
             <div
-              className="row w-100 align-items-end text-center p-1"
+              className="row w-100 align-items-end text-center"
               style={{ fontSize: "80%" }}
             >
               <div className="col-3">
@@ -269,6 +293,7 @@ class Comisiones extends React.Component {
                   name="monthSalary"
                   thousandSeparator="."
                   decimalSeparator=","
+                  decimalScale={0}
                   value={this.state.salario}
                   onChange={(ev) => {
                     this.cambioSalario(ev.target.value);
@@ -293,6 +318,7 @@ class Comisiones extends React.Component {
                   value={this.state.presupuesto}
                   thousandSeparator="."
                   decimalSeparator=","
+                  decimalScale={0}
                   onChange={(ev) => {
                     this.cambioPresupuesto(ev.target.value);
                   }}
@@ -329,6 +355,7 @@ class Comisiones extends React.Component {
                   name="pptoMonth"
                   thousandSeparator="."
                   decimalSeparator=","
+                  decimalScale={0}
                   value={this.state.presupuesto / this.state.meses}
                   // onChange={(ev) => {
                   //   this.cambioPresupuestoMensual(ev.target.value);
@@ -336,21 +363,21 @@ class Comisiones extends React.Component {
                   disabled
                 />
               </div>
-              <div className="col me-0 pe-0">
+              <div className="col">
                 <br />
                 <button
-                  className="btn btn-success w-75 me-0"
+                  className="btn w-100"
+                  id="calcular"
                   onClick={this.submitForm}
                   disabled={this.state.activarButton ? false : true}
-                  style={styleTwoLastColumns}
                 >
                   Calcular
                 </button>
               </div>
             </div>
-          </form>
 
           {this.state.mostrarTabla ? <Table data={this.state} /> : null}
+        </div>
         </div>
       </>
     );

@@ -5,6 +5,9 @@ import React from "react";
 import "antd/dist/antd.css";
 import { Layout } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import axios from "axios";
+
+var url_base = "http://localhost:8080";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -14,6 +17,8 @@ class Main extends React.Component {
     this.state = {
       collapsed: false,
       mensaje: "",
+      dataLogged: [],
+      errors: "",
     };
   }
 
@@ -26,7 +31,6 @@ class Main extends React.Component {
   render() {
     const footerStyle = { height: "5%", lineHeight: "50%" };
     const infoLogin = this.props.infoLogin;
-
     return (
       <div>
         <Layout>
@@ -36,7 +40,10 @@ class Main extends React.Component {
             collapsible
             collapsed={this.state.collapsed}
           >
-            <MenuPage collapsed={this.state.collapsed} infoLogin={infoLogin}></MenuPage>
+            <MenuPage
+              collapsed={this.state.collapsed}
+              infoLogin={infoLogin}
+            ></MenuPage>
           </Sider>
           <Layout className="site-layout">
             <Header
@@ -63,7 +70,7 @@ class Main extends React.Component {
                 minHeight: "100vh",
               }}
             >
-              <Dashboard infoLogin={infoLogin}/>
+              <Dashboard infoLogin={infoLogin} />
             </Content>
             <Footer style={footerStyle} className="text-center">
               <FooterPage></FooterPage>

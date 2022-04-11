@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import logoTotal from "../../../infinivirt_logo.png";
 import logoSmall from "../../../nube_infinivirt.png";
 import styles from "../Menu/styles.css";
+import App from "../../../App";
 import "antd/dist/antd.css";
 import { Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import {
   HomeOutlined,
@@ -22,11 +24,20 @@ import {
 
 const { SubMenu } = Menu;
 
+var url_base = "http://localhost:8080";
+
 const MenuPage = (props) => {
+  const history = useNavigate();
   var collapsed = props.collapsed;
   const [selectedMenuItem, setSelectedMenuItem] = useState("item1");
   var infoLogin = props.infoLogin;
-  console.log(infoLogin);
+
+  const logout = () => {
+    var request = "/api/session/logout";
+    axios.get(url_base + request, { withCredentials: true }).then((res) => {});
+    history("/");
+    window.location.reload(true);
+  };
 
   var showComitions = false;
 
@@ -66,11 +77,7 @@ const MenuPage = (props) => {
         <Menu.Item hidden={showComitions} key="1" icon={<HomeOutlined />}>
           <Link to="/Home" /> Dashboard
         </Menu.Item>
-        <SubMenu
-          key="sub1"
-          icon={<ReconciliationOutlined />}
-          title="Reportes"
-        >
+        <SubMenu key="sub1" icon={<ReconciliationOutlined />} title="Reportes">
           <Menu.Item key="3" icon={<AreaChartOutlined />}>
             <Link to="/Ventas" />
             Informe de Ventas
@@ -120,6 +127,23 @@ const MenuPage = (props) => {
           KPI SBCs
         </Menu.Item>
       </Menu>
+      {collapsed ? (
+        <img
+          src="https://flaticons.net/icon.php?slug_category=mobile-application&slug_icon=logout"
+          width={20}
+          onClick={logout}
+          style={{ marginLeft: "40%", cursor: "pointer", marginTop: "17%" }}
+        ></img>
+      ) : (
+        <button
+          onClick={logout}
+          type="button"
+          className=" w-75 btn btn-outline-light"
+          style={{ marginLeft: "10%" }}
+        >
+          Cerrar Sesion
+        </button>
+      )}
     </>
   );
 };

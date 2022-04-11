@@ -2,12 +2,17 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 import { Component } from "react";
-import Login from "./Components/Login/Login";
 import Main from "./Components/Main/main";
 import axios from "axios";
 import Logo from "./Infinivirt_gris.png";
 import User from "./Usuario.svg";
 import Password from "./Password.svg";
+import swal from "sweetalert";
+import sha256 from "crypto-js/sha256";
+import hmacSHA512 from "crypto-js/hmac-sha512";
+import Base64 from "crypto-js/enc-base64";
+
+var CryptoJS = require("crypto-js");
 
 var url_base = "http://localhost:8080";
 
@@ -20,8 +25,6 @@ class App extends Component {
       status: false,
       datos: [],
     };
-
-    this.sendDataLogin = this.sendDataLogin.bind(this);
   }
   onChangeUsername(username) {
     this.setState({
@@ -38,133 +41,425 @@ class App extends Component {
   sendDataLogin(ev) {
     const username = this.state.username;
     const password = this.state.password;
-    var request = url_base + "/api/session/login";
-    var info = {
-      username: username,
-      password: password,
+
+    console.log()
+
+    let header = {
+      withCredentials: true,
     };
-    axios.post(request, info).then((res) => {
-      this.setState({
-        status: true,
-        datos: res.data,
+    var request = "/api/session/login";
+
+    if (username == "" || password == "") {
+      swal("Campos requeridos", "Por favor, digite todos los campos", "info");
+    }
+
+    axios
+      .post(url_base + request, { username, password }, header)
+      .then((res) => {
+        this.setState({
+          status: true,
+          datos: res.data,
+        });
+        if (res.data.login == false) {
+          swal("Error", "Credenciales Incorrectas", "error");
+        }
       });
-    });
-    ev.preventDefault();
+  }
+
+  consultIsLogged() {
+    var request = "/api/session/isLogged";
+    axios
+      .get(url_base + request, { withCredentials: true })
+      .then((res) => {
+        this.setState({
+          dataLogged: res.data,
+        });
+      })
+      .catch((err) => {
+        if (err.response) {
+          this.setState({
+            errors: err.response.status,
+          });
+        }
+      });
+  }
+
+  componentDidMount() {
+    this.consultIsLogged();
   }
 
   render() {
     var data = this.state.datos;
-    console.log(data.login);
-    if (data.login == true) {
-      return <Main infoLogin={this.state}></Main>;
+    var dataLogin = this.state.dataLogged;
+
+    if (dataLogin !== undefined) {
+      if (dataLogin.login == true) {
+        this.state.username = dataLogin.username;
+        return <Main infoLogin={this.state}></Main>;
+      }
     }
 
-    return (
-      <>
-        {/* <section class="login-block">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-md-8 banner-sec">
-                <div class="carousel-inner" role="listbox">
-                  <img class="img-fluid" src={Logo} alt="Logo Infinivirt" />
-                  <div class="mt-5">
-                    <div class="banner-text">
-                      <h2>Plataforma de Informacion Interna</h2>
-                    </div>
-                  </div>
-                </div>
+    if (data.login == true) {
+      return <Main infoLogin={this.state}></Main>;
+    } else {
+      return (
+        <>
+          <div
+            className="col-8"
+            style={{ height: "100vh !important", float: "left" }}
+          >
+            <div class="container">
+              <img
+                src={Logo}
+                id="LogoInicial"
+                style={{ width: "50%", marginTop: "20%", marginLeft: "25%" }}
+              ></img>
+              <div class="circle-container">
+                <div class="circle"></div>
               </div>
-
-              <div class="col-md-4 login-sec">
-                <h2 class="text-center">Login Now</h2>
-                <form class="login-form">
-                  <div class="input-group mb-3">
-                  <img src={User} width={25}></img>
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Username"
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
-                    >                     
-                    </input>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1" class="text-uppercase">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      class="form-control"
-                      placeholder=""
-                    />
-                  </div>
-
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="checkbox" class="form-check-input" />
-                      <small>Remember Me</small>
-                    </label>
-                    <button type="submit" class="btn btn-login float-right">
-                      Submit
-                    </button>
-                  </div>
-                </form>
-                <div class="copy-text"></div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-container">
+                <div class="circle"></div>
               </div>
             </div>
           </div>
-        </section> */}
-        <div
-          className="col-7 bg-info"
-          style={{ height: "100%", float: "left" }}
-        >
-          <img src={Logo} style={{ width: "30%" }}></img>
-        </div>
-        <div className="registration-form col-5" style={{height:"100vh !important;"}}>
-          <form>
-            <div>
-              <h4 id="encabezado">Iniciar Sesion</h4>
-            </div>
-            <div className="input-wrapper">
+          <div
+            className="registration-form col-4"
+            style={{ height: "100vh !important;" }}
+          >
+            <h5 id="encabezado">Iniciar Sesion</h5>
+            <div className="input-wrapper initial">
               <img className="input-icon" src={User} />
               <input
                 type="text"
-                className="form-control item"
+                className="form-control item input"
                 placeholder="Email"
-                style={{paddingLeft: "10%"}}
+                style={{ paddingLeft: "10%" }}
                 value={this.state.username}
                 onChange={(ev) => this.onChangeUsername(ev.target.value)}
-                required={true}
               />
             </div>
-
-            <div className="input-wrapper">
+            <div className="input-wrapper secondary">
               <img className="input-icon" src={Password} />
               <input
                 type="password"
                 className="form-control item input"
                 placeholder="Contraseña"
                 value={this.state.password}
-                style={{paddingLeft: "10%"}}
+                style={{ paddingLeft: "10%" }}
                 onChange={(ev) => this.onChangePassword(ev.target.value)}
-                required={true}
               />
             </div>
 
             <div className="form-group">
               <button
                 type="submit"
-                className="btn btn-outline-primary login"
+                className="btn login"
                 onClick={(ev) => this.sendDataLogin(ev)}
               >
                 <span>Iniciar Sesion</span>
               </button>
             </div>
-          </form>
-        </div>
-      </>
-    );
+            <h6 style={{ marginTop: "30%", textAlign: "center" }}>
+              &copy; Infinivirt 2022
+            </h6>
+          </div>
+        </>
+      );
+    }
   }
 }
 

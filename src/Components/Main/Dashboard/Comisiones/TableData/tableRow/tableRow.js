@@ -276,9 +276,10 @@ class TableRow extends React.Component {
 
     ////////////////////////////////////////////////////////////////////
 
-    const presuVenta = item.pptoVenta.toLocaleString("es-CO");
+    const presuVenta = Math.trunc(item.pptoVenta).toLocaleString("es-CO");
 
     const porcentajeCumpli = Math.round(item.porcCumplimiento * 100);
+
     //const porcentajeCumpli = item.porcCumplimiento * 100;
 
     const porcentajeActu = Math.round(item.Porcentaje * 100);
@@ -289,13 +290,13 @@ class TableRow extends React.Component {
     const porcentajeVentaNueva = Math.round(item.PorcentajeNuevo * 100);
     //const porcentajeVentaNueva = item.PorcentajeNuevo * 100;
 
-    const presupuestoAcum = item.PresupuestoAcumulado.toLocaleString("es-CO");
+    const presupuestoAcum = Math.trunc(item.PresupuestoAcumulado).toLocaleString("es-CO");
 
-    const comiActualPesos = item.ComisionAct.toLocaleString("es-CO");
+    const comiActualPesos = Math.trunc(item.ComisionAct).toLocaleString("es-CO");
 
-    const comiNuevaPesos = item.ComisionNue.toLocaleString("es-CO");
+    const comiNuevaPesos = Math.trunc(item.ComisionNue).toLocaleString("es-CO");
 
-    const salarioPesos = item.salarioTotal.toLocaleString("es-CO");
+    const salarioPesos = Math.trunc(item.salarioTotal).toLocaleString("es-CO");
 
     // Crearia una funcion con el insert donde se le envien todos los datos,
     // En los metodos de table Data
