@@ -8,13 +8,10 @@ import Logo from "./Infinivirt_gris.png";
 import User from "./Usuario.svg";
 import Password from "./Password.svg";
 import swal from "sweetalert";
-import sha256 from "crypto-js/sha256";
-import hmacSHA512 from "crypto-js/hmac-sha512";
-import Base64 from "crypto-js/enc-base64";
 
 var CryptoJS = require("crypto-js");
 
-var url_base = "http://localhost:8080";
+var url_base = process.env.REACT_APP_DB_HOST;
 
 class App extends Component {
   constructor(props) {
@@ -38,11 +35,21 @@ class App extends Component {
     });
   }
 
+  pulsarEnter(e) {
+    if (e.keyCode === 13 && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById("loginBtn").click();
+    }
+  }
+
   sendDataLogin(ev) {
-    const username = this.state.username;
+    const username = this.state.username.toLowerCase();
     const password = this.state.password;
 
-    console.log()
+    var cipherTextPass = CryptoJS.AES.encrypt(
+      password,
+      "intrainfinivirt"
+    ).toString();
 
     let header = {
       withCredentials: true,
@@ -54,7 +61,7 @@ class App extends Component {
     }
 
     axios
-      .post(url_base + request, { username, password }, header)
+      .post(url_base + request, { username, cipherTextPass }, header)
       .then((res) => {
         this.setState({
           status: true,
@@ -430,6 +437,7 @@ class App extends Component {
                 style={{ paddingLeft: "10%" }}
                 value={this.state.username}
                 onChange={(ev) => this.onChangeUsername(ev.target.value)}
+                onKeyUp={(e) => this.pulsarEnter(e)}
               />
             </div>
             <div className="input-wrapper secondary">
@@ -441,6 +449,7 @@ class App extends Component {
                 value={this.state.password}
                 style={{ paddingLeft: "10%" }}
                 onChange={(ev) => this.onChangePassword(ev.target.value)}
+                onKeyUp={(e) => this.pulsarEnter(e)}
               />
             </div>
 
@@ -448,6 +457,7 @@ class App extends Component {
               <button
                 type="submit"
                 className="btn login"
+                id="loginBtn"
                 onClick={(ev) => this.sendDataLogin(ev)}
               >
                 <span>Iniciar Sesion</span>

@@ -24,7 +24,7 @@ class Dashboard extends React.Component {
             path="Comisiones"
             element={<Comisiones infoLogin={infoLogin} />}
           ></Route>
-          <Route path="RTL" element={<API></API>}></Route>
+          <Route path="RTL" element={<RTL></RTL>}></Route>
           <Route path="SBC" element={<SBC></SBC>}></Route>
         </Routes>
       </>

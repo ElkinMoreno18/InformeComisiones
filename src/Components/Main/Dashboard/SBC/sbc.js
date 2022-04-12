@@ -4,7 +4,7 @@ import axios from "axios";
 import { color } from "d3-color";
 import { interpolateRgb } from "d3-interpolate";
 
-var url_base = "http://localhost:8080/";
+var url_base = process.env.REACT_APP_DB_HOST;
 
 export default class SBC extends React.Component {
   constructor(props) {
@@ -15,7 +15,7 @@ export default class SBC extends React.Component {
   }
 
   consultData() {
-    var request = "api/sbc/kpi/claroDPBX/";
+    var request = "/api/sbc/kpi/claroDPBX/";
     axios.get(url_base + request).then((res) => {
       this.setState({
         datos: res.data,

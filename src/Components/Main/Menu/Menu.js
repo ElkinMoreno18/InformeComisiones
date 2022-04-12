@@ -24,7 +24,7 @@ import {
 
 const { SubMenu } = Menu;
 
-var url_base = "http://localhost:8080";
+var url_base = process.env.REACT_APP_DB_HOST;
 
 const MenuPage = (props) => {
   const history = useNavigate();
@@ -48,8 +48,7 @@ const MenuPage = (props) => {
     infoLogin.username == "sandra.ramos" ||
     infoLogin.username == "maria.zapata" ||
     infoLogin.username == "ingry.marquez" ||
-    infoLogin.username == "jorge.arango" ||
-    infoLogin.username == "elkin.moreno"
+    infoLogin.username == "jorge.arango" 
   ) {
     showComitions = true;
   } else {
@@ -74,7 +73,7 @@ const MenuPage = (props) => {
         mode="inline"
         defaultSelectedKeys={["1"]}
       >
-        <Menu.Item hidden={showComitions} key="1" icon={<HomeOutlined />}>
+        <Menu.Item key="1" icon={<HomeOutlined />}>
           <Link to="/Home" /> Dashboard
         </Menu.Item>
         <SubMenu key="sub1" icon={<ReconciliationOutlined />} title="Reportes">
@@ -106,7 +105,7 @@ const MenuPage = (props) => {
           <Link to="/Activos" />
           Inventario de Activos
         </Menu.Item>
-        <Menu.Item hidden={!showComitions} key="10" icon={<DollarOutlined />}>
+        <Menu.Item hidden={(showComitions || infoLogin.username == "elkin.moreno" || infoLogin.username == "jesus.montoya") ? false : true} key="10" icon={<DollarOutlined />}>
           <Link to="/Comisiones" />
           Reporte de Comisiones
         </Menu.Item>

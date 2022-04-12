@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 import { Layout } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import axios from "axios";
+import './main.css'
 
 var url_base = "http://localhost:8080";
 
@@ -60,6 +61,10 @@ class Main extends React.Component {
                   },
                 }
               )}
+              <div style={{float: 'right'}}>
+              <p><strong>Usuario:</strong> {infoLogin.username}</p>
+
+              </div>
             </Header>
             <Content
               className="site-layout-background"

@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import CurrencyFormat from "react-currency-format";
 
-var url_base = "http://localhost:8080";
+var url_base = process.env.REACT_APP_DB_HOST;
 var fecha = new Date();
 var firstSale = "";
 var mostrar = "";

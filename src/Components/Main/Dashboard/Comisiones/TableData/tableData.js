@@ -2,7 +2,7 @@ import React from "react";
 import TableRow from "./tableRow/tableRow";
 import axios from "axios";
 
-var url_base = "http://localhost:8080";
+var url_base = process.env.REACT_APP_DB_HOST;
 
 class tableData extends React.Component {
   constructor(props) {

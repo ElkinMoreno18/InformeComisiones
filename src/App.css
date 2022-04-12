@@ -45,7 +45,10 @@ body {
   padding: 15px 15px 15px 35px;
   width: 100%;
   height: 100% !important;
-  box-shadow: #ff9c04 !important;
+}
+
+.input:focus{
+  box-shadow: 0 0 10px #ff9c04 !important;
 }
 
 .registration-form .form-icon {

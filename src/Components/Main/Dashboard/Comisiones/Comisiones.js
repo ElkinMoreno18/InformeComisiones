@@ -6,7 +6,7 @@ import "material-icons/iconfont/material-icons.css";
 import { Modal, Button } from "antd";
 import './Comisiones.css'
 
-var url_base = "http://localhost:8080";
+var url_base = process.env.REACT_APP_DB_HOST;
 
 class Comisiones extends React.Component {
   constructor(props) {
@@ -81,7 +81,6 @@ class Comisiones extends React.Component {
   render() {
 
     const infoLogin = this.props.infoLogin;
-    console.log(infoLogin);
     var hidden = true;
 
     const handleOk = () => {
@@ -105,9 +104,6 @@ class Comisiones extends React.Component {
       hidden = true;
     }
 
-    console.log(hidden);
-
-
     var data = this.state.datos;
 
     if (data.length > 0) {
@@ -122,7 +118,6 @@ class Comisiones extends React.Component {
     } else {
       this.state.activarButton = false;
     }
-    console.log(this.state.modalVisible);
     return (
       <>
       <div hidden={hidden}>
@@ -203,7 +198,6 @@ class Comisiones extends React.Component {
                       }
                       value="Leidy"
                     >
-                      {console.log(infoLogin.username)}
                       Leidy tangarife
                     </option>
                     <option
@@ -259,8 +253,6 @@ class Comisiones extends React.Component {
                     }
                     label="Coordinadores"
                   >
-                    {console.log(infoLogin.username)}
-                    {console.log(hidden)}
 
                     <option
                       hidden={
